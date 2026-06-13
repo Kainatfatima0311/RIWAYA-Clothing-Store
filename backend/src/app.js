@@ -26,10 +26,22 @@ export const createApp = () => {
   );
   app.use(mongoSanitize());
 
-  // CORS
+  // CORS — accept one or more comma-separated origins from CLIENT_URL, and
+  // ignore trailing slashes so a stray "/" in the env var can't silently break
+  // CORS (a common deploy footgun). Requests with no Origin header (curl,
+  // health checks, server-to-server) are allowed through.
+  const allowedOrigins = (env.clientUrl || '')
+    .split(',')
+    .map((o) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
   app.use(
     cors({
-      origin: env.clientUrl,
+      origin(origin, cb) {
+        if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ''))) {
+          return cb(null, true);
+        }
+        return cb(null, false);
+      },
       credentials: true,
     })
   );
