@@ -27,6 +27,10 @@ const getApp = () => {
 export default async function handler(req, res) {
   try {
     const app = await getApp();
+    // Vercel's catch-all rewrite can hand the bare root request an empty/odd
+    // req.url; normalize it so Express routes '/' cleanly instead of crashing
+    // the function (FUNCTION_INVOCATION_FAILED).
+    if (!req.url) req.url = '/';
     return app(req, res);
   } catch (err) {
     console.error('RIWAYA API initialization failed:', err?.message);
