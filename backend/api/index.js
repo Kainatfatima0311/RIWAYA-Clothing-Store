@@ -1,25 +1,37 @@
 // Vercel serverless entry point for the RIWAYA API.
 //
 // On Vercel the Express app does NOT call app.listen() — every incoming request
-// is handed to this exported handler instead. We build the app once per cold
-// start and ensure the (cached) MongoDB connection is ready before delegating
-// to Express, so the first request can't race the connection or leak an
-// unhandled rejection. Warm invocations return the cached connection instantly.
-// Local development still uses src/server.js via `npm run dev`.
-import { createApp } from '../src/app.js';
-import { connectDB } from '../src/config/db.js';
+// is handed to this exported handler instead. App construction and the (cached)
+// MongoDB connection are deferred into the handler and wrapped in try/catch, so
+// ANY cold-start failure (missing env var, DB unreachable, bad import) returns a
+// clean JSON 500 with the cause logged — instead of an opaque function crash —
+// and is retried on the next request. Warm invocations reuse the cached app and
+// connection instantly. Local development still uses src/server.js (npm run dev).
+let appPromise = null;
 
-const app = createApp();
+const getApp = () => {
+  if (!appPromise) {
+    appPromise = (async () => {
+      const { createApp } = await import('../src/app.js');
+      const { connectDB } = await import('../src/config/db.js');
+      await connectDB();
+      return createApp();
+    })().catch((err) => {
+      appPromise = null; // reset so the next request can retry initialization
+      throw err;
+    });
+  }
+  return appPromise;
+};
 
 export default async function handler(req, res) {
   try {
-    await connectDB();
+    const app = await getApp();
+    return app(req, res);
   } catch (err) {
-    console.error('DB connection failed in serverless handler:', err?.message);
+    console.error('RIWAYA API initialization failed:', err?.message);
     res.statusCode = 500;
     res.setHeader('content-type', 'application/json');
-    res.end(JSON.stringify({ success: false, message: 'Database connection failed' }));
-    return;
+    res.end(JSON.stringify({ success: false, message: 'Server initialization failed' }));
   }
-  return app(req, res);
 }

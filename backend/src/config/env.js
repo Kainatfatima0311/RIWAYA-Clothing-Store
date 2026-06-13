@@ -15,8 +15,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 const missing = required.filter((k) => !process.env[k]);
 if (missing.length) {
-  console.error(`Missing required env vars: ${missing.join(', ')}`);
-  process.exit(1);
+  // Throw instead of process.exit(1): on Vercel this surfaces at cold start
+  // where the serverless entry (api/index.js) catches it and returns a clean
+  // 500 with the message logged, rather than an opaque FUNCTION_INVOCATION_FAILED.
+  // Locally and in CLI seed scripts this still fails fast with a clear message.
+  throw new Error(`Missing required env vars: ${missing.join(', ')}`);
 }
 
 export const env = {
