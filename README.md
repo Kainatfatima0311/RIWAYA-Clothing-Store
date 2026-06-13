@@ -1,10 +1,10 @@
-# RIWAYA — Complete MERN E-commerce & ERP
+# RIWAYA - Complete MERN E-commerce & ERP
 
-> Premium Pakistani clothing brand — full-stack ecommerce platform with admin ERP panel.
+RIWAYA is a full-stack MERN ecommerce platform for a premium Pakistani clothing brand, with a customer storefront and a staff ERP/admin panel.
 
 Yeh project ek complete **end-to-end MERN stack application** hai jo bridal, embroidered, formal aur casual clothing kay liye design ki gayi hai. Storefront pe customers shopping kar saktay hain, aur admin panel sy aap **warehouses, stock, suppliers, purchase orders, employees, orders, payments aur finance** sab kuch manage kar saktay hain.
 
-**Status:** Phase 12 complete + post-build audit fixes (8 bugs caught & patched on 2026-05-17).
+**Current status:** GitHub-ready, build verified, and high-severity dependency audits cleared on 2026-06-14.
 
 ---
 
