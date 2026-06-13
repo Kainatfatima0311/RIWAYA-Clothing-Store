@@ -911,26 +911,71 @@ Invalid email or password
 
 ---
 
-## 21. Deployment Notes
+## 21. Deployment Notes — Vercel (two projects)
 
-A starting checklist (not a full guide):
+RIWAYA deploys as **two separate Vercel projects from one repo**: the backend
+runs as a serverless function, the frontend as a static SPA. The data layer is
+already cloud-based (MongoDB Atlas + Cloudinary), so nothing local is required.
 
-### Backend
-- Host: any Node host (Render, Railway, Fly.io, EC2, VPS)
-- Set all env vars from `.env.example` — **especially** a real `JWT_SECRET`
-- Use **MongoDB Atlas** for the database
-- Use **Cloudinary** for images (the local `/uploads` folder won't persist on most platforms)
-- Set `NODE_ENV=production` — disables `morgan`
-- Run `node src/server.js` (not `nodemon`)
-- Configure your platform to keep the process alive (PM2, systemd, or the platform's own restart policy)
+```
+riwaya-api.vercel.app   ← backend  (Root Directory: backend/)
+riwaya.vercel.app       ← frontend (Root Directory: frontend/)
+```
 
-### Frontend
-- `npm run build` → upload `frontend/dist` to any static host (Vercel, Netlify, Cloudflare Pages, S3 + CloudFront)
-- Update `VITE_API_URL` to point at the deployed backend
-- Make sure `CLIENT_URL` on the backend matches the frontend's deployed URL exactly (no trailing slash mismatch)
+Deploy-relevant files already in the repo:
+- `backend/api/index.js` — serverless entry (builds the Express app, awaits the cached DB connection).
+- `backend/vercel.json` — rewrites every path to the function so Express does its own routing.
+- `frontend/vercel.json` — SPA fallback (all routes → `index.html`).
 
-### CORS gotcha (production)
-Production cookies require `secure: true` and `sameSite: 'none'` if frontend and backend are on different domains.
+### Step 1 — MongoDB Atlas
+- Use an Atlas `mongodb+srv://…` connection string for `MONGO_URI`.
+- **Network Access → Allow Access from Anywhere (`0.0.0.0/0`)** — Vercel's serverless IPs are dynamic.
+
+### Step 2 — Deploy the backend project
+1. Vercel → **Add New → Project** → import this repo.
+2. **Root Directory: `backend`**. Framework Preset: **Other**.
+3. Add Environment Variables (Production):
+
+   | Key | Value |
+   |-----|-------|
+   | `NODE_ENV` | `production` |
+   | `MONGO_URI` | your Atlas `mongodb+srv://…/riwaya` string |
+   | `JWT_SECRET` | a long random string (`node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`) |
+   | `JWT_EXPIRE` | `7d` |
+   | `JWT_COOKIE_EXPIRE` | `7` |
+   | `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | from Cloudinary (required in prod) |
+   | `CLIENT_URL` | the frontend URL (set after Step 3, then redeploy) |
+   | `SUPER_ADMIN_NAME` / `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PASSWORD` | first admin (for seeding) |
+
+4. Deploy. Verify `https://<backend>.vercel.app/api/health` returns `{ "success": true }`.
+
+### Step 3 — Deploy the frontend project
+1. **Add New → Project** → same repo, **Root Directory: `frontend`** (Vercel auto-detects Vite).
+2. Environment Variables:
+
+   | Key | Value |
+   |-----|-------|
+   | `VITE_API_URL` | `https://<backend>.vercel.app/api` |
+   | `VITE_BRAND_NAME` | `RIWAYA` |
+   | `VITE_CURRENCY` | `PKR` |
+
+3. Deploy. Then go back to the **backend** project, set `CLIENT_URL` to the frontend URL, and **redeploy the backend** (so CORS + cookies allow the real origin).
+
+### Step 4 — Seed the database
+Run once from your machine, pointed at Atlas (set the same `MONGO_URI`/`SUPER_ADMIN_*` in `backend/.env`):
+
+```powershell
+cd backend
+npm run seed:admin    # creates the first super admin
+npm run seed:demo     # optional demo warehouse + products
+```
+
+### Notes & gotchas
+- **Cross-site cookies**: frontend and backend are on different domains, so auth cookies use `SameSite=None; Secure` in production (handled in `generateToken.js`). Auth also works via the Bearer token in `localStorage`, so login is robust either way.
+- **`VITE_*` are build-time**: changing `VITE_API_URL` requires a frontend redeploy, not just an env edit.
+- **No local uploads**: images go to Cloudinary (Vercel has no writable disk) — `CLOUDINARY_*` are required in production or the function exits on boot.
+- **Rate limiting** is in-memory and resets per cold start (not shared across instances); fine for this scale.
+- Every push to the repo's default branch auto-deploys both projects.
 
 ---
 
@@ -1069,5 +1114,3 @@ For module-specific questions, start at the relevant `backend/src/modules/<name>
 **Locale:** Pakistan (PKR currency, NTN/GST/CNIC, JazzCash/EasyPaisa)
 
 **Happy building! Agar koi problem aaye to Troubleshooting (Section 20) dekhain ya issue raise karain.**
-#   R I W A Y A - C l o t h i n g - S t o r e  
- 

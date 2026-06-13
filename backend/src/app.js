@@ -13,6 +13,11 @@ import { notFound, errorHandler } from './middleware/error.middleware.js';
 export const createApp = () => {
   const app = express();
 
+  // Behind Vercel's proxy — trust the first hop so secure cookies, req.ip and
+  // express-rate-limit (which reads X-Forwarded-For) behave correctly. Using a
+  // numeric hop count (not `true`) avoids rate-limit's permissive-proxy error.
+  app.set('trust proxy', 1);
+
   // Security — helmet with crossOriginResourcePolicy adjusted so storefront/admin can load uploaded images
   app.use(
     helmet({
