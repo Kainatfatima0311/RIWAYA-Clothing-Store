@@ -24,27 +24,28 @@ export default function Home() {
         />
         {/* Readability overlay so the headline stays legible over the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
-        {/* Focused dark spotlight behind the headline so the text stays prominent */}
-        <div
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{ background: 'radial-gradient(ellipse 72% 60% at 50% 42%, rgba(0,0,0,0.62), rgba(0,0,0,0) 72%)' }}
-        />
         {/* Ambient light sweep — subtle continuous "live" motion across the hero */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheen" />
         </div>
-        <div className="container text-center text-white">
-          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 animate-fade-up">A timeless tradition</p>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg animate-fade-up" style={{ animationDelay: '80ms' }}>
-            Crafted in heritage,<br />
-            <span className="text-accent">worn with pride.</span>
-          </h1>
-          <p className="mt-6 text-white/85 max-w-xl mx-auto animate-fade-up" style={{ animationDelay: '160ms' }}>
-            RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: '240ms' }}>
-            <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
-            <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
+        <div className="container text-white">
+          <div className="relative mx-auto max-w-4xl">
+            {/* Brushed dark wash — soft blurred black behind the text so it pops off the photo */}
+            <div aria-hidden="true" className="pointer-events-none absolute -inset-x-8 -inset-y-12 bg-black/50 blur-3xl rounded-[45%]" />
+            <div className="relative text-center">
+              <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 animate-fade-up">A timeless tradition</p>
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg animate-fade-up" style={{ animationDelay: '80ms' }}>
+                Crafted in heritage,<br />
+                <span className="text-accent">worn with pride.</span>
+              </h1>
+              <p className="mt-6 text-white/85 max-w-xl mx-auto animate-fade-up" style={{ animationDelay: '160ms' }}>
+                RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: '240ms' }}>
+                <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
+                <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
+              </div>
+            </div>
           </div>
         </div>
 
