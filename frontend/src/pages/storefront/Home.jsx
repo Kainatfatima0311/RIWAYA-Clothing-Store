@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Sparkles, ShieldCheck, Truck, ArrowRight } from 'lucide-react';
+import { Sparkles, ShieldCheck, Truck, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { useStorefrontFeaturedQuery, useStorefrontCategoriesQuery } from '@/api/productApi';
 import { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
 // Imported (not a /public path) so Vite bundles it with a content-hashed filename —
 // guaranteed to resolve on Vercel regardless of base path.
-import heroImg from '@/assets/hero2.jpeg';
+import heroImg from '@/assets/hero3.jpeg';
 
 export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
@@ -37,6 +37,11 @@ export default function Home() {
             <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
             <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
           </div>
+        </div>
+
+        {/* Live scroll cue — gentle continuous bounce */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 animate-bounce" aria-hidden="true">
+          <ChevronDown className="h-6 w-6" />
         </div>
       </section>
 
