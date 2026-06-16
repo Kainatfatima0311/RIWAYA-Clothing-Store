@@ -6,7 +6,7 @@ import { useStorefrontFeaturedQuery, useStorefrontCategoriesQuery } from '@/api/
 import { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
 // Imported (not a /public path) so Vite bundles it with a content-hashed filename —
 // guaranteed to resolve on Vercel regardless of base path.
-import heroImg from '@/assets/hero2.jpeg';
+import heroImg from '@/assets/hero5.jpeg';
 
 export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative isolate overflow-hidden bg-neutral-900 min-h-[85vh] flex items-center py-20">
+      <section className="relative isolate overflow-hidden bg-neutral-900 min-h-[calc(100vh-4rem)] flex items-center py-20">
         {/* Hero background photo */}
         <img
           src={heroImg}
@@ -28,23 +28,19 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheen" />
         </div>
-        <div className="container text-white">
-          <div className="relative mx-auto max-w-4xl">
-            {/* Brushed dark wash — soft blurred black behind the text so it pops off the photo */}
-            <div aria-hidden="true" className="pointer-events-none absolute -inset-x-8 -inset-y-12 bg-black/50 blur-3xl rounded-[45%]" />
-            <div className="relative text-center">
-              <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 animate-fade-up">A timeless tradition</p>
-              <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg animate-fade-up" style={{ animationDelay: '80ms' }}>
-                Crafted in heritage,<br />
-                <span className="text-accent">worn with pride.</span>
-              </h1>
-              <p className="mt-6 text-white/85 max-w-xl mx-auto animate-fade-up" style={{ animationDelay: '160ms' }}>
-                RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: '240ms' }}>
-                <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
-                <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
-              </div>
+        <div className="container text-center text-white">
+          <div className="mx-auto max-w-3xl animate-fade-up">
+            <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 drop-shadow">A timeless tradition</p>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
+              Crafted in heritage,<br />
+              <span className="text-accent">worn with pride.</span>
+            </h1>
+            <p className="mt-6 text-white/85 max-w-xl mx-auto drop-shadow-md">
+              RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
+              <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
             </div>
           </div>
         </div>
