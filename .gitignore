@@ -31,3 +31,6 @@ Thumbs.db
 
 # Vercel
 .vercel
+
+# Project report (local documentation — not part of the deployed app)
+PROJECT_REPORT.md
