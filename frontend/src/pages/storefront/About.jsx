@@ -12,7 +12,7 @@ import about5 from '@/assets/about/about5.jpeg';
 const VALUES = [
   { icon: Scissors, title: 'Heritage craftsmanship', desc: 'Hand-stitched embroidery and detailing by skilled Pakistani artisans, passed down through generations.' },
   { icon: ShieldCheck, title: 'Premium fabrics', desc: 'Lawn, silk, chiffon and velvet — carefully sourced for comfort, drape and lasting elegance.' },
-  { icon: Sparkles, title: 'Timeless design', desc: 'Traditional motifs reimagined in contemporary silhouettes for the modern wardrobe.' },
+  { icon: Sparkles, title: 'Timeless design', desc: 'Classic patterns redesigned in modern styles for everyday wear.' },
   { icon: Heart, title: 'Made with love', desc: 'Every piece is finished with the care we would give to our own family’s celebrations.' },
 ];
 
@@ -32,7 +32,7 @@ export default function About() {
         <div className="container text-center max-w-3xl text-white">
           <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4">Our Story</p>
           <h1 className="font-serif text-4xl md:text-6xl leading-tight text-balance drop-shadow-lg">
-            Woven from tradition,<br />
+            Inspired by tradition,<br />
             <span className="text-accent">made for today.</span>
           </h1>
           <p className="mt-6 text-white/85">
@@ -45,14 +45,14 @@ export default function About() {
       {/* Story */}
       <section className="container py-16 grid md:grid-cols-2 gap-10 items-center">
         <div className="space-y-4 text-muted-foreground order-2 md:order-1">
-          <h2 className="font-serif text-3xl text-foreground">From the artisan’s hands to yours</h2>
+          <h2 className="font-serif text-3xl text-foreground">Made by hand, just for you</h2>
           <p>
             What began as a small studio of embroiderers has grown into a house of bridal, formal and everyday wear.
             We work directly with karigars who treat every kameez, sharara and dupatta as a canvas.
           </p>
           <p>
-            From hand-stitched zardozi to flowing chiffon drapes, our pieces blend traditional craftsmanship with
-            contemporary silhouettes — so you feel rooted and effortlessly modern at once.
+            From hand-stitched zardozi to flowing chiffon, our pieces mix traditional handwork with
+            modern shapes — so you feel both classic and modern at the same time.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             {PILLARS.map((p) => (
@@ -97,12 +97,12 @@ export default function About() {
       <section className="border-t">
         <div className="container py-16">
           <div className="text-center mb-10">
-            <h2 className="font-serif text-3xl md:text-4xl">Inside our atelier</h2>
-            <p className="text-muted-foreground mt-2">A glimpse of the people and craft behind the collection.</p>
+            <h2 className="font-serif text-3xl md:text-4xl">Behind the scenes</h2>
+            <p className="text-muted-foreground mt-2">A look at the people and work behind every order.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <img src={about4} alt="RIWAYA atelier" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
-            <img src={about5} alt="RIWAYA detailing" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
+            <img src={about4} alt="RIWAYA order packing" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
+            <img src={about5} alt="RIWAYA warehouse" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
           </div>
         </div>
       </section>

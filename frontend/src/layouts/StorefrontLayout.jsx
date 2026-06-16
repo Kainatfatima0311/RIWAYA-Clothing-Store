@@ -43,7 +43,7 @@ export default function StorefrontLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
+      <header className="dark sticky top-0 z-30 border-b bg-background/85 text-foreground backdrop-blur">
         <div className="container flex items-center justify-between h-16">
           <Link to="/" className="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-primary truncate min-w-0">
             {BRAND_NAME}
@@ -138,7 +138,7 @@ export default function StorefrontLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t mt-16">
+      <footer className="dark bg-background text-foreground border-t mt-16">
         <div className="container py-10 grid md:grid-cols-4 gap-8">
           <div>
             <div className="font-serif text-2xl text-primary">{BRAND_NAME}</div>

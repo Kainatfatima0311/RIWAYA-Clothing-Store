@@ -4,45 +4,48 @@
 
 @layer base {
   :root {
-    /* Light theme — brand: deep wine + champagne gold */
-    --background: 36 33% 97%;          /* warm cream */
-    --foreground: 350 28% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 350 28% 10%;
-    --primary: 343 70% 26%;            /* deep wine #8B1538 */
-    --primary-foreground: 36 33% 97%;
-    --secondary: 350 14% 92%;
-    --secondary-foreground: 350 28% 10%;
-    --accent: 38 38% 60%;              /* champagne gold #C9A96E */
-    --accent-foreground: 350 28% 10%;
-    --muted: 36 18% 92%;
-    --muted-foreground: 350 12% 35%;
-    --destructive: 0 84% 50%;
+    /* Light theme — Warm Ivory + Premium Gold (luxury B2B palette) */
+    --background: 34 56% 90%;          /* Warm Ivory      #F4E8D8 */
+    --foreground: 30 11% 11%;          /* Rich Charcoal   #1E1B18 */
+    --card: 0 0% 100%;                 /* White cards     #FFFFFF */
+    --card-foreground: 30 11% 11%;
+    --primary: 34 55% 50%;             /* Warm Gold       #C68A3A */
+    --primary-foreground: 0 0% 100%;   /* White text on gold */
+    --primary-hover: 35 62% 55%;       /* Gold Bronze     #D49A47 */
+    --secondary: 31 38% 75%;           /* Soft Beige      #D8C1A8 */
+    --secondary-foreground: 30 11% 11%;
+    --accent: 34 55% 50%;              /* Warm Gold accent #C68A3A */
+    --accent-foreground: 0 0% 100%;
+    --muted: 34 40% 88%;               /* Light warm beige */
+    --muted-foreground: 29 26% 23%;    /* Dark Brown      #4A3A2B */
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
-    --border: 36 18% 86%;
-    --input: 36 18% 86%;
-    --ring: 343 70% 26%;
+    --border: 29 26% 62%;              /* Soft Taupe      #B79D84 */
+    --input: 29 26% 62%;
+    --ring: 34 55% 50%;                /* Gold focus ring */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 350 18% 8%;
-    --foreground: 36 33% 95%;
-    --card: 350 18% 11%;
-    --card-foreground: 36 33% 95%;
-    --primary: 38 38% 60%;
-    --primary-foreground: 350 28% 10%;
-    --secondary: 350 12% 18%;
-    --secondary-foreground: 36 33% 95%;
-    --accent: 343 50% 35%;
-    --accent-foreground: 36 33% 95%;
-    --muted: 350 12% 16%;
-    --muted-foreground: 36 18% 70%;
+    /* Luxury Dark theme — Matte Black + Charcoal + Gold */
+    --background: 0 0% 7%;             /* Matte Black     #121212 */
+    --foreground: 34 36% 95%;          /* Cream White     #F7F3EE */
+    --card: 0 0% 11%;                  /* Charcoal Black  #1C1C1C */
+    --card-foreground: 34 36% 95%;
+    --primary: 34 55% 50%;             /* Warm Gold       #C68A3A */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 35 62% 55%;       /* Gold Bronze     #D49A47 */
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 34 36% 95%;
+    --accent: 35 62% 55%;              /* Gold Bronze     #D49A47 */
+    --accent-foreground: 0 0% 7%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 33 20% 72%;
     --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 350 12% 20%;
-    --input: 350 12% 20%;
-    --ring: 38 38% 60%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 34 55% 50%;
   }
 
   * {

@@ -65,7 +65,7 @@ export default function Home() {
                 <Link
                   key={cat._id}
                   to={`/products?category=${cat._id}`}
-                  className="group relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center text-center p-4 hover:shadow-lg transition-shadow"
+                  className="group relative aspect-[4/5] rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-end justify-center text-center p-4 hover:shadow-lg transition-shadow"
                 >
                   {hasImage && (
                     <>
