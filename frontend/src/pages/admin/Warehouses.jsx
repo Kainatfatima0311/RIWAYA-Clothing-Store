@@ -151,7 +151,7 @@ function WarehouseFormModal({ open, onClose, initial, onSubmit, loading }) {
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit(submit)} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}
     >
       <form className="grid grid-cols-2 gap-3">
-        <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
+        <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true, minLength: { value: 3, message: 'At least 3 characters' } })} /></div>
         <div><Label required>Code</Label><Input {...register('code', { required: true })} placeholder="WH-LHR-01" /></div>
         <div><Label required>City</Label><Input {...register('city', { required: true })} placeholder="Lahore" /></div>
         <div><Label>Area</Label><Input {...register('area')} placeholder="DHA Phase 5" /></div>

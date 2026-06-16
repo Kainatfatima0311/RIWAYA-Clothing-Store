@@ -220,7 +220,7 @@ function PaymentModal({ open, onClose, order, onSubmit, loading }) {
   const { register, handleSubmit } = useForm({ defaultValues: { amount: outstanding, method: 'cash' } });
   return (
     <Modal open={open} onClose={onClose} title="Record payment" description={`Outstanding: ${formatPrice(outstanding)}`}
-      footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ amount: Number(v.amount), method: v.method, reference: v.reference, notes: v.notes }))} loading={loading}>Save</Button></>}>
+      footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ amount: Number(v.amount), method: v.method, referenceNumber: v.reference, notes: v.notes }))} loading={loading}>Save</Button></>}>
       <div className="space-y-3">
         <div><Label required>Amount (Rs)</Label><Input type="number" {...register('amount', { required: true })} /></div>
         <div><Label>Method</Label><Select {...register('method')}>{PAYMENT_METHODS.map((m) => <option key={m} value={m}>{m.replace(/_/g, ' ')}</option>)}</Select></div>

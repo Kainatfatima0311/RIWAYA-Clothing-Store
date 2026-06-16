@@ -133,7 +133,7 @@ function CategoryFormModal({ open, onClose, initial, allCategories, onSubmit, lo
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ ...v, parent: v.parent || null }))} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}
     >
       <form className="space-y-3">
-        <div><Label required>Name</Label><Input {...register('name', { required: true })} placeholder="Bridal, Embroidered…" /></div>
+        <div><Label required>Name</Label><Input {...register('name', { required: true, minLength: { value: 2, message: 'Name must be at least 2 characters' } })} placeholder="Bridal, Embroidered…" /></div>
         <div><Label>Parent (optional)</Label>
           <Select {...register('parent')}>
             <option value="">(Top-level)</option>
