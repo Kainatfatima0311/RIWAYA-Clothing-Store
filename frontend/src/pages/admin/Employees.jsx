@@ -19,9 +19,11 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { formatPrice, formatDate } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const DEPARTMENTS = ['warehouse', 'sales', 'inventory', 'accounts', 'admin', 'hr', 'it', 'marketing', 'logistics', 'production', 'other'];
 const STATUSES = ['active', 'on_leave', 'suspended', 'terminated', 'resigned', 'probation'];
+const SALARY_SUFFIX = { monthly: 'mo', weekly: 'wk', daily: 'day', hourly: 'hr' };
 
 export default function Employees() {
   const [filters, setFilters] = useState({ search: '', department: '', status: '' });
@@ -42,7 +44,14 @@ export default function Employees() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
+  };
+
+  const handleSetStatus = async (id, status) => {
+    try {
+      await setStatus({ id, status }).unwrap();
+      toast.success('Status updated');
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed to update status')); }
   };
 
   const columns = [
@@ -50,10 +59,10 @@ export default function Employees() {
     { key: 'designation', label: 'Designation' },
     { key: 'department', label: 'Dept', render: (r) => <Badge variant="outline" className="capitalize">{r.department}</Badge> },
     { key: 'phone', label: 'Phone' },
-    { key: 'salary', label: 'Salary', render: (r) => formatPrice(r.salary) + `/${r.salaryFrequency?.replace('ly','')}` },
+    { key: 'salary', label: 'Salary', render: (r) => `${formatPrice(r.salary)}/${SALARY_SUFFIX[r.salaryFrequency] || r.salaryFrequency || ''}` },
     { key: 'joiningDate', label: 'Joined', render: (r) => formatDate(r.joiningDate) },
     { key: 'status', label: 'Status', render: (r) => (
-      <Select value={r.status} onChange={(e) => setStatus({ id: r._id, status: e.target.value }).then(() => toast.success('Status updated'))} className="h-8 text-xs w-32">
+      <Select value={r.status} onChange={(e) => handleSetStatus(r._id, e.target.value)} className="h-8 text-xs w-32">
         {STATUSES.map((s) => <option key={s} value={s}>{s.replace('_',' ')}</option>)}
       </Select>
     ) },
@@ -92,7 +101,7 @@ export default function Employees() {
 
       <EmployeeFormModal open={modalOpen} onClose={() => setModalOpen(false)} initial={editing} onSubmit={handleSave} loading={creating || updating} />
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete employee?"
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={deleting} />
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { ProductImage } from '@/components/storefront/ProductImage';
 import { formatPrice } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -52,7 +53,7 @@ export default function ProductDetail() {
     try {
       await addToCart({ product: product._id, variantId: selectedVariant._id, quantity: qty }).unwrap();
       toast.success('Added to cart');
-    } catch (err) { toast.error(err?.data?.message || 'Could not add to cart'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Could not add to cart')); }
   };
 
   const handleAddToWishlist = async () => {
@@ -60,7 +61,7 @@ export default function ProductDetail() {
     try {
       await addToWishlist({ product: product._id }).unwrap();
       toast.success(inWishlist ? 'Already in wishlist' : 'Added to wishlist');
-    } catch (err) { toast.error(err?.data?.message || 'Could not add to wishlist'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Could not add to wishlist')); }
   };
 
   return (

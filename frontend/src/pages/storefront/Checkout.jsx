@@ -16,6 +16,7 @@ import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const schema = z.object({
   fullName: z.string().min(2, 'Required'),
@@ -121,7 +122,7 @@ export default function Checkout() {
       toast.success(`Order ${orderNumber} placed! Payment is pending verification.`);
       navigate(`/track/${orderNumber}`, { state: { justPlaced: true } });
     } catch (err) {
-      toast.error(err?.data?.message || 'Could not place order');
+      toast.error(apiErrorMessage(err, 'Could not place order'));
     }
   };
 

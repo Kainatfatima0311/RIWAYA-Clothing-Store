@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/Label';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { StatusTimeline } from '@/components/storefront/StatusTimeline';
 import { formatPrice, formatDate, formatDateTime } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const NEXT_STATUS = {
   pending: ['confirmed', 'cancelled'],
@@ -72,7 +73,7 @@ export default function OrderDetail() {
                   key={s}
                   variant={s === 'delivered' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={async () => { try { await transition({ id, status: s }).unwrap(); toast.success(`Moved to ${s.replace(/_/g, ' ')}`); } catch (err) { toast.error(err?.data?.message); } }}
+                  onClick={async () => { try { await transition({ id, status: s }).unwrap(); toast.success(`Moved to ${s.replace(/_/g, ' ')}`); } catch (err) { toast.error(apiErrorMessage(err)); } }}
                   loading={transitioning}
                 >
                   Mark as {s.replace(/_/g, ' ')}
@@ -187,12 +188,12 @@ export default function OrderDetail() {
         </aside>
       </div>
 
-      <CourierModal open={courierOpen} onClose={() => setCourierOpen(false)} order={o} onSubmit={async (v) => { try { await updateCourier({ id, ...v }).unwrap(); toast.success('Updated'); setCourierOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={updatingCourier} />
+      <CourierModal open={courierOpen} onClose={() => setCourierOpen(false)} order={o} onSubmit={async (v) => { try { await updateCourier({ id, ...v }).unwrap(); toast.success('Updated'); setCourierOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={updatingCourier} />
 
-      <PaymentModal open={paymentOpen} onClose={() => setPaymentOpen(false)} order={o} onSubmit={async (v) => { try { await recordPayment({ order: id, ...v }).unwrap(); toast.success('Payment recorded'); setPaymentOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={paying} />
+      <PaymentModal open={paymentOpen} onClose={() => setPaymentOpen(false)} order={o} onSubmit={async (v) => { try { await recordPayment({ order: id, ...v }).unwrap(); toast.success('Payment recorded'); setPaymentOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={paying} />
 
       <Modal open={cancelOpen} onClose={() => setCancelOpen(false)} title="Cancel order?"
-        footer={<><Button variant="outline" onClick={() => setCancelOpen(false)}>Keep order</Button><Button variant="destructive" disabled={!cancelReason} onClick={async () => { try { await cancel({ id, reason: cancelReason }).unwrap(); toast.success('Cancelled'); setCancelOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={cancelling}>Cancel order</Button></>}>
+        footer={<><Button variant="outline" onClick={() => setCancelOpen(false)}>Keep order</Button><Button variant="destructive" disabled={!cancelReason} onClick={async () => { try { await cancel({ id, reason: cancelReason }).unwrap(); toast.success('Cancelled'); setCancelOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={cancelling}>Cancel order</Button></>}>
         <Label required>Reason</Label>
         <Textarea rows={3} value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} />
       </Modal>

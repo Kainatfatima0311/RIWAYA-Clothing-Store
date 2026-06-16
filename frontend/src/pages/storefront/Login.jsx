@@ -14,6 +14,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Label, FormError } from '@/components/ui/Label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
 import { isStaff as isStaffRole } from '@/lib/constants';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const schema = z.object({
   email: z.string().email('Enter a valid email'),
@@ -57,7 +58,7 @@ export default function Login() {
       navigate(dest, { replace: true });
     } catch (err) {
       console.error('[Login] Error:', err);
-      toast.error(err?.data?.message || 'Login failed');
+      toast.error(apiErrorMessage(err, 'Login failed'));
     }
   };
 

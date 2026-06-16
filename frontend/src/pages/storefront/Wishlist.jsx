@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Wishlist() {
   const { data, isLoading } = useGetWishlistQuery();
@@ -56,7 +57,7 @@ export default function Wishlist() {
       await addToCart({ product: detail._id, variantId: firstVariant._id, quantity: 1 }).unwrap();
       toast.success('Added to cart');
     } catch (err) {
-      toast.error(err?.data?.message || 'Could not move to cart');
+      toast.error(apiErrorMessage(err, 'Could not move to cart'));
     }
   };
 

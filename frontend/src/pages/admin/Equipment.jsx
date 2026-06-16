@@ -23,6 +23,7 @@ import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
 import { formatPrice, formatDate } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const CONDITIONS = ['new', 'working', 'needs_repair', 'under_repair', 'retired', 'lost'];
 
@@ -50,7 +51,7 @@ export default function Equipment() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
   };
 
   const columns = [
@@ -104,11 +105,11 @@ export default function Equipment() {
       <EquipmentFormModal open={modalOpen} onClose={() => setModalOpen(false)} initial={editing} categories={cats?.data || []} warehouses={warehouses?.data || []} onSubmit={handleSave} loading={creating || updating} />
 
       <Modal open={catModalOpen} onClose={() => setCatModalOpen(false)} title="Equipment categories">
-        <CategoriesQuickList categories={cats?.data || []} onCreate={async (name) => { try { await createCat({ name }).unwrap(); toast.success('Category created'); } catch (e) { toast.error(e?.data?.message || 'Failed'); } }} loading={catCreating} />
+        <CategoriesQuickList categories={cats?.data || []} onCreate={async (name) => { try { await createCat({ name }).unwrap(); toast.success('Category created'); } catch (e) { toast.error(apiErrorMessage(e, 'Failed')); } }} loading={catCreating} />
       </Modal>
 
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete asset?"
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={deleting} />
     </div>
   );
 }

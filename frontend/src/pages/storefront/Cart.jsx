@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function Cart() {
     try {
       await updateItem({ itemId, quantity }).unwrap();
     } catch (err) {
-      toast.error(err?.data?.message || 'Failed to update');
+      toast.error(apiErrorMessage(err, 'Failed to update'));
     }
   };
 

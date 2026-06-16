@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/Button';
 import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Categories() {
   const [search, setSearch] = useState('');
@@ -41,14 +42,14 @@ export default function Categories() {
         toast.success('Created');
       }
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
   };
 
   const toggleDisplay = async (cat) => {
     try {
       await update({ id: cat._id, displayOnFrontend: !cat.displayOnFrontend }).unwrap();
       toast.success(`${cat.displayOnFrontend ? 'Hidden from' : 'Shown on'} storefront`);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
   };
 
   const columns = [
@@ -105,7 +106,7 @@ export default function Categories() {
         description="Will fail if products or sub-categories are linked."
         onConfirm={async () => {
           try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); }
-          catch (err) { toast.error(err?.data?.message || 'Cannot delete'); }
+          catch (err) { toast.error(apiErrorMessage(err, 'Cannot delete')); }
         }}
         loading={deleting}
       />

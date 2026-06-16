@@ -18,6 +18,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { formatPrice, formatDate } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Customers() {
   const [filters, setFilters] = useState({ search: '', customerType: '', segment: '' });
@@ -37,7 +38,7 @@ export default function Customers() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
   };
 
   const columns = [
@@ -85,7 +86,7 @@ export default function Customers() {
 
       <CustomerFormModal open={modalOpen} onClose={() => setModalOpen(false)} initial={editing} onSubmit={handleSave} loading={creating || updating} />
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete customer?"
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Cannot delete'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Cannot delete')); } }} loading={deleting} />
     </div>
   );
 }

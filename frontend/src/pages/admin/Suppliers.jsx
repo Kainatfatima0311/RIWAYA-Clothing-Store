@@ -18,6 +18,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { formatPrice } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Suppliers() {
   const [search, setSearch] = useState('');
@@ -37,7 +38,7 @@ export default function Suppliers() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed to save supplier')); }
   };
 
   const columns = [
@@ -79,7 +80,7 @@ export default function Suppliers() {
         title="Delete supplier?"
         onConfirm={async () => {
           try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); }
-          catch (err) { toast.error(err?.data?.message || 'Cannot delete'); }
+          catch (err) { toast.error(apiErrorMessage(err, 'Cannot delete supplier')); }
         }}
         loading={deleting}
       />

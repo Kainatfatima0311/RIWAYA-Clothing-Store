@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/Input';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Label, FormError } from '@/components/ui/Label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const schema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -38,7 +39,7 @@ export default function Register() {
       toast.success(`Welcome to RIWAYA, ${user.name.split(' ')[0]}!`);
       navigate('/');
     } catch (err) {
-      toast.error(err?.data?.message || 'Registration failed');
+      toast.error(apiErrorMessage(err, 'Registration failed'));
     }
   };
 

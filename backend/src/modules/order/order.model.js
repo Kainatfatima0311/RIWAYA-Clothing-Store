@@ -155,7 +155,7 @@ orderSchema.index({ orderType: 1, orderedAt: -1 });
 orderSchema.index({ orderNumber: 'text' });
 
 orderSchema.virtual('outstandingAmount').get(function () {
-  return Math.max(0, (this.grandTotal || 0) - (this.paidAmount || 0) + (this.refundedAmount || 0));
+  return Math.max(0, (this.grandTotal || 0) - (this.paidAmount || 0));
 });
 
 orderSchema.virtual('itemCount').get(function () {

@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/format';
 import { Badge } from '@/components/ui/Badge';
 import { ProductImage } from '@/components/storefront/ProductImage';
 import { cn } from '@/lib/utils';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export function ProductCard({ product }) {
   const isAuth = useAppSelector(selectIsAuthenticated);
@@ -38,7 +39,7 @@ export function ProductCard({ product }) {
       }).unwrap();
       toast.success('Added to cart');
     } catch (err) {
-      toast.error(err?.data?.message || 'Could not add to cart');
+      toast.error(apiErrorMessage(err, 'Could not add to cart'));
     }
   };
 
@@ -53,7 +54,7 @@ export function ProductCard({ product }) {
       await addToWishlist({ product: product._id }).unwrap();
       toast.success('Added to wishlist');
     } catch (err) {
-      toast.error(err?.data?.message || 'Could not add to wishlist');
+      toast.error(apiErrorMessage(err, 'Could not add to wishlist'));
     }
   };
 

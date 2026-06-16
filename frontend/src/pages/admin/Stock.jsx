@@ -26,6 +26,7 @@ import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
 import { formatPrice } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Stock() {
   const [filters, setFilters] = useState({ search: '', stockStatus: '' });
@@ -57,7 +58,7 @@ export default function Stock() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
   };
 
   const columns = [
@@ -112,10 +113,10 @@ export default function Stock() {
 
       <StockItemFormModal open={modalOpen} onClose={() => setModalOpen(false)} initial={editing} suppliers={suppliers?.data || []} rackCategories={rackCats?.data || []} onSubmit={handleSave} loading={creating || updating} />
 
-      <StockOpModal op={opModal} onClose={() => setOpModal(null)} racks={racks?.data || []} onReceive={async (v) => { try { await receive(v).unwrap(); toast.success('Stock received'); setOpModal(null); } catch (e) { toast.error(e?.data?.message || 'Failed'); } }} onTransfer={async (v) => { try { await transfer(v).unwrap(); toast.success('Stock transferred'); setOpModal(null); } catch (e) { toast.error(e?.data?.message || 'Failed'); } }} onAdjust={async (v) => { try { await adjust(v).unwrap(); toast.success('Adjusted'); setOpModal(null); } catch (e) { toast.error(e?.data?.message || 'Failed'); } }} onWriteOff={async (v) => { try { await writeOff(v).unwrap(); toast.success('Written off'); setOpModal(null); } catch (e) { toast.error(e?.data?.message || 'Failed'); } }} />
+      <StockOpModal op={opModal} onClose={() => setOpModal(null)} racks={racks?.data || []} onReceive={async (v) => { try { await receive(v).unwrap(); toast.success('Stock received'); setOpModal(null); } catch (e) { toast.error(apiErrorMessage(e, 'Failed')); } }} onTransfer={async (v) => { try { await transfer(v).unwrap(); toast.success('Stock transferred'); setOpModal(null); } catch (e) { toast.error(apiErrorMessage(e, 'Failed')); } }} onAdjust={async (v) => { try { await adjust(v).unwrap(); toast.success('Adjusted'); setOpModal(null); } catch (e) { toast.error(apiErrorMessage(e, 'Failed')); } }} onWriteOff={async (v) => { try { await writeOff(v).unwrap(); toast.success('Written off'); setOpModal(null); } catch (e) { toast.error(apiErrorMessage(e, 'Failed')); } }} />
 
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete stock item?"
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={deleting} />
     </div>
   );
 }

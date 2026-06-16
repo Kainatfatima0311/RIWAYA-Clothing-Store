@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 const ASSET_BASE = API_BASE.replace(/\/api$/, '');
@@ -57,14 +58,18 @@ export function ImageUploader({ value = [], onChange, category = 'general', max 
       });
 
       const body = await res.json();
-      if (!res.ok) throw new Error(body?.message || 'Upload failed');
+      if (!res.ok) {
+        const e = new Error(body?.message || 'Upload failed');
+        e.data = body; // carry { message, details } so field errors can surface
+        throw e;
+      }
 
       const uploaded = Array.isArray(body.data) ? body.data : [body.data];
       const newImages = single ? uploaded : [...images, ...uploaded];
       onChange(newImages);
       toast.success(`${uploaded.length} image(s) uploaded`);
     } catch (err) {
-      toast.error(err.message || 'Upload failed');
+      toast.error(apiErrorMessage(err, err.message || 'Upload failed'));
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = '';

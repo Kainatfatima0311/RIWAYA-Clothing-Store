@@ -20,6 +20,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { formatPrice, formatDate } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const STATUSES = ['draft', 'placed', 'partially_received', 'fully_received', 'cancelled'];
 
@@ -73,10 +74,10 @@ export default function PurchaseOrders() {
       <DataTable columns={columns} data={data?.data || []} loading={isLoading} pagination={data?.pagination} onPageChange={setPage} onRowClick={(r) => navigate(`/admin/purchase-orders/${r._id}`)} />
 
       <POFormModal open={modalOpen} onClose={() => setModalOpen(false)} suppliers={suppliers?.data || []} warehouses={warehouses?.data || []}
-        onSubmit={async (values) => { try { const res = await create(values).unwrap(); toast.success('PO drafted'); setModalOpen(false); navigate(`/admin/purchase-orders/${res.data._id}`); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={creating} />
+        onSubmit={async (values) => { try { const res = await create(values).unwrap(); toast.success('PO drafted'); setModalOpen(false); navigate(`/admin/purchase-orders/${res.data._id}`); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={creating} />
 
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete PO?" description="Only draft POs can be deleted."
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={deleting} />
     </div>
   );
 }

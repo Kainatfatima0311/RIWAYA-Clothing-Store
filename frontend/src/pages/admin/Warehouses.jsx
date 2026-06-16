@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/Input';
 import { Label, FormError } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { useForm } from 'react-hook-form';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Warehouses() {
   const [search, setSearch] = useState('');
@@ -39,7 +40,7 @@ export default function Warehouses() {
       toast.success('Warehouse deleted');
       setConfirmId(null);
     } catch (err) {
-      toast.error(err?.data?.message || 'Cannot delete');
+      toast.error(apiErrorMessage(err, 'Cannot delete'));
     }
   };
 
@@ -96,7 +97,7 @@ export default function Warehouses() {
             }
             setModalOpen(false);
           } catch (err) {
-            toast.error(err?.data?.message || 'Failed');
+            toast.error(apiErrorMessage(err, 'Failed'));
           }
         }}
         loading={creating || updating}

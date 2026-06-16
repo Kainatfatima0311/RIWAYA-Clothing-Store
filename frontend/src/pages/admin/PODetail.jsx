@@ -19,6 +19,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { formatPrice, formatDate, formatDateTime } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 const PAYMENT_METHODS = ['cash', 'bank_transfer', 'cheque', 'online', 'jazzcash', 'easypaisa', 'other'];
 
@@ -50,7 +51,7 @@ export default function PODetail() {
         actions={
           <div className="flex items-center gap-2">
             {po.status === 'draft' && (
-              <Button onClick={async () => { try { await approve(id).unwrap(); toast.success('PO approved'); } catch (err) { toast.error(err?.data?.message); } }} loading={approving}>
+              <Button onClick={async () => { try { await approve(id).unwrap(); toast.success('PO approved'); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={approving}>
                 <CheckCircle2 className="h-4 w-4 mr-1" /> Approve
               </Button>
             )}
@@ -171,14 +172,14 @@ export default function PODetail() {
       </div>
 
       {/* Receipt modal */}
-      <ReceiptModal open={receiptOpen} onClose={() => setReceiptOpen(false)} po={po} onSubmit={async (v) => { try { await addReceipt({ id, ...v }).unwrap(); toast.success('Receipt recorded'); setReceiptOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={receiving} />
+      <ReceiptModal open={receiptOpen} onClose={() => setReceiptOpen(false)} po={po} onSubmit={async (v) => { try { await addReceipt({ id, ...v }).unwrap(); toast.success('Receipt recorded'); setReceiptOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={receiving} />
 
       {/* Payment modal */}
-      <PaymentModal open={paymentOpen} onClose={() => setPaymentOpen(false)} po={po} onSubmit={async (v) => { try { await addPayment({ id, ...v }).unwrap(); toast.success('Payment recorded'); setPaymentOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={paying} />
+      <PaymentModal open={paymentOpen} onClose={() => setPaymentOpen(false)} po={po} onSubmit={async (v) => { try { await addPayment({ id, ...v }).unwrap(); toast.success('Payment recorded'); setPaymentOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={paying} />
 
       {/* Cancel modal */}
       <Modal open={cancelOpen} onClose={() => setCancelOpen(false)} title="Cancel PO?"
-        footer={<><Button variant="outline" onClick={() => setCancelOpen(false)}>Keep PO</Button><Button variant="destructive" disabled={!cancelReason} onClick={async () => { try { await cancel({ id, reason: cancelReason }).unwrap(); toast.success('PO cancelled'); setCancelOpen(false); } catch (err) { toast.error(err?.data?.message); } }} loading={cancelling}>Cancel PO</Button></>}>
+        footer={<><Button variant="outline" onClick={() => setCancelOpen(false)}>Keep PO</Button><Button variant="destructive" disabled={!cancelReason} onClick={async () => { try { await cancel({ id, reason: cancelReason }).unwrap(); toast.success('PO cancelled'); setCancelOpen(false); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={cancelling}>Cancel PO</Button></>}>
         <Label required>Reason</Label>
         <Textarea rows={3} value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder="Why cancelling?" />
       </Modal>

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 import { toast } from 'sonner';
 import { formatPrice, formatDateTime } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Payments() {
   const [filters, setFilters] = useState({ method: '', status: '' });
@@ -37,7 +38,7 @@ export default function Payments() {
       await updateStatus({ id, status: 'completed' }).unwrap();
       toast.success(`${paymentNumber} approved — order paid`);
     } catch (err) {
-      toast.error(err?.data?.message || 'Approval failed');
+      toast.error(apiErrorMessage(err, 'Approval failed'));
     }
   };
 
@@ -46,7 +47,7 @@ export default function Payments() {
       await updateStatus({ id, status: 'failed' }).unwrap();
       toast.success(`${paymentNumber} marked as failed`);
     } catch (err) {
-      toast.error(err?.data?.message || 'Failed');
+      toast.error(apiErrorMessage(err, 'Failed'));
     }
   };
 
@@ -136,7 +137,7 @@ export default function Payments() {
         loading={refunding}
         onConfirm={async () => {
           try { await refund({ id: refundId, reason: 'Manual refund from admin panel' }).unwrap(); toast.success('Refunded'); setRefundId(null); }
-          catch (err) { toast.error(err?.data?.message || 'Failed'); }
+          catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
         }}
       />
     </div>

@@ -23,6 +23,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { formatPrice } from '@/lib/format';
+import { apiErrorMessage } from '@/lib/apiError';
 
 export default function Products() {
   const [filters, setFilters] = useState({ search: '', category: '', status: '' });
@@ -47,7 +48,21 @@ export default function Products() {
       else await create(values).unwrap();
       toast.success(editing ? 'Updated' : 'Created');
       setModalOpen(false);
-    } catch (err) { toast.error(err?.data?.message || 'Failed'); }
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); }
+  };
+
+  const handleSetStatus = async (id, status) => {
+    try {
+      await setStatus({ id, status }).unwrap();
+      toast.success('Status updated');
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed to update status')); }
+  };
+
+  const handleToggleDisplay = async (r) => {
+    try {
+      await toggle({ id: r._id, displayOnFrontend: !r.displayOnFrontend }).unwrap();
+      toast.success(r.displayOnFrontend ? 'Hidden' : 'Shown');
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed to update visibility')); }
   };
 
   const columns = [
@@ -68,12 +83,12 @@ export default function Products() {
     </div> },
     { key: 'categories', label: 'Categories', render: (r) => r.categories?.map((c) => c.name || '').filter(Boolean).join(', ') || '—' },
     { key: 'status', label: 'Status', render: (r) => (
-      <Select value={r.status} onChange={(e) => setStatus({ id: r._id, status: e.target.value }).then(() => toast.success('Status updated'))} className="h-8 text-xs w-28">
+      <Select value={r.status} onChange={(e) => handleSetStatus(r._id, e.target.value)} className="h-8 text-xs w-28">
         {['draft','published','archived'].map((s) => <option key={s} value={s}>{s}</option>)}
       </Select>
     ) },
     { key: 'display', label: 'Frontend', render: (r) => (
-      <button onClick={() => toggle({ id: r._id, displayOnFrontend: !r.displayOnFrontend }).then(() => toast.success(r.displayOnFrontend ? 'Hidden' : 'Shown'))} className="inline-flex items-center gap-1.5">
+      <button onClick={() => handleToggleDisplay(r)} className="inline-flex items-center gap-1.5">
         {r.displayOnFrontend ? <Eye className="h-4 w-4 text-emerald-600" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
       </button>
     ) },
@@ -123,7 +138,7 @@ export default function Products() {
         loading={creating || updating}
       />
       <ConfirmDialog open={!!confirmId} onClose={() => setConfirmId(null)} title="Delete product?"
-        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(err?.data?.message || 'Failed'); } }} loading={deleting} />
+        onConfirm={async () => { try { await remove(confirmId).unwrap(); toast.success('Deleted'); setConfirmId(null); } catch (err) { toast.error(apiErrorMessage(err, 'Failed')); } }} loading={deleting} />
     </div>
   );
 }
