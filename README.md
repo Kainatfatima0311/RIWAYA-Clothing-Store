@@ -48,10 +48,12 @@ Yeh project ek complete **end-to-end MERN stack application** hai jo bridal, emb
 - Product detail with variants, image gallery, stock status
 - Cart + Wishlist (anonymous cart supported; merges on login)
 - Checkout with shipping address + payment method
-- Order tracking by order number
-- "My Orders" history
-- Customer profile editing
+- Order tracking by order number ("My Orders" + "Track Order" appear in the navbar only when signed in)
+- "My Orders" order history
+- Editable profile — name, phone & change password
+- Contact page (store details + message form) and a redesigned About brand-story page
 - Register / Login / Logout
+- Luxury gold/ivory/charcoal theme with entrance/hover animations and real-time cart/wishlist updates
 
 ### B. Admin Panel (staff-only)
 - **Warehouses** — multi-warehouse, multi-floor, racks, rack categories
@@ -59,7 +61,8 @@ Yeh project ek complete **end-to-end MERN stack application** hai jo bridal, emb
 - **Suppliers / Mills** — with NTN, GST, bank details
 - **Purchase Orders** — full lifecycle (draft → placed → partial received → fully received → closed) with payments
 - **Stock Items** — receive, transfer, adjust, write-off with low-stock alerts
-- **Products + Categories** — with frontend visibility toggle
+- **Products + Categories** — frontend visibility toggle, **Featured** toggle (feeds the home "Featured Pieces"), and per-category **image upload** (feeds the home "Shop by Category")
+- **Dashboard** — operations snapshot + inline **employee management** (add/edit/remove, status, salary + payroll summary)
 - **Customers** — online + walk-in
 - **Employees** — with departments, salary fields
 - **Orders** — online + physical/POS with full status lifecycle
@@ -540,6 +543,7 @@ Defined in [frontend/src/routes/AppRouter.jsx](frontend/src/routes/AppRouter.jsx
 |------|------|------|
 | `/` | Home | public |
 | `/about` | About | public |
+| `/contact` | Contact | public |
 | `/products` | Product listing | public |
 | `/products/:slug` | Product detail | public |
 | `/cart` | Cart | public (anonymous cart supported) |
@@ -571,7 +575,9 @@ Defined in [frontend/src/routes/AppRouter.jsx](frontend/src/routes/AppRouter.jsx
 | `/admin/customers` | Customer directory | staff |
 | `/admin/employees` | Employees | super_admin |
 | `/admin/equipment` | Equipment | staff |
+| `/admin/rack-categories` | Rack categories | staff |
 | `/admin/reports` | Reports | staff |
+| `/admin/guide` | Getting-started guide | staff |
 
 ---
 
@@ -676,7 +682,29 @@ What's in place:
 
 ---
 
-## 16. Recent Audit Fixes (2026-05-17)
+## 16. Recent Changes & Audit Fixes
+
+### 2026-06-16 — UI overhaul, real-time UX & bug fixes
+
+**New features & UI**
+- **Luxury re-theme** — Warm Gold `#C68A3A` / Warm Ivory `#F4E8D8` / Rich Charcoal palette driven by CSS tokens (`index.css`); matte-black navbar + footer, gold-bronze button hover.
+- **Animations** — entrance/scroll reveals (`components/ui/Reveal.jsx`), `hover-lift`, button press feedback, animated cart/wishlist badges. Honors `prefers-reduced-motion`.
+- **Real-time cart & wishlist** — optimistic updates (`cartApi`/`wishlistApi`): the navbar count pops the instant you add; product cards show a spinner → ✓ confirmation.
+- **Home "Shop by Category"** — admin uploads a per-category image (Categories form) shown on the home grid; the "Show on storefront" toggle now controls the grid.
+- **Home "Featured Pieces"** — admin marks products **Featured** (Products form checkbox + ⭐ quick-toggle in the table).
+- **Dashboard employee management** — add/edit/remove employees, change status, see salary + estimated monthly payroll without leaving the dashboard.
+- **Checkout payment accounts** — picking Bank Transfer / JazzCash / EasyPaisa shows RIWAYA's receiving account details with copy buttons (`PAYMENT_ACCOUNTS` in `Checkout.jsx`). Update with real accounts.
+- **Editable profile** — `/profile` edits name, phone, and password.
+- **Contact page** (`/contact`) added; **About** redesigned with imagery. **My Orders** + **Track Order** show in the navbar only when signed in.
+
+**Bug fixes**
+1. **Customer & Employee `user` index** — removed `default: null` on the optional `user` field. A sparse-unique index treats an explicit `null` as a value, so the **2nd** walk-in customer / 2nd employee collided (`Duplicate value 'null' for field 'user'`). Field is now omitted when absent → unlimited records (no migration needed).
+2. **Cart not clearing after checkout** — `order.service.js#placeOnlineOrder` now calls `cartService.clear(userId)` after the order saves (best-effort; never fails a placed order).
+3. **Payments list showed "No records found"** — `baseApi` now strips blank query params. Previously `status=''`/`method=''` failed the backend's optional-enum (Zod) validation and 400'd the entire list. Fixes every admin list filter.
+
+> Note: deployed on Vercel — these take effect after the next deploy.
+
+### 2026-05-17 — End-to-end audit
 
 End-to-end audit after Phase 12 — **8 real bugs caught and fixed** by two parallel exploration agents (backend + frontend):
 

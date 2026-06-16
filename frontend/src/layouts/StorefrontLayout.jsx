@@ -73,7 +73,7 @@ export default function StorefrontLayout() {
             <Link to="/wishlist" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Wishlist">
               <Heart className="h-5 w-5" />
               {wlCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                <span key={wlCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-scale-in">
                   {wlCount}
                 </span>
               )}
@@ -81,7 +81,7 @@ export default function StorefrontLayout() {
             <Link to="/cart" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Cart">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                <span key={cartCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-scale-in">
                   {cartCount}
                 </span>
               )}

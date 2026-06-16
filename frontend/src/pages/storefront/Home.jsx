@@ -6,7 +6,7 @@ import { useStorefrontFeaturedQuery, useStorefrontCategoriesQuery } from '@/api/
 import { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
 // Imported (not a /public path) so Vite bundles it with a content-hashed filename —
 // guaranteed to resolve on Vercel regardless of base path.
-import heroImg from '@/assets/home1.jpeg';
+import heroImg from '@/assets/hero2.jpeg';
 
 export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
@@ -20,7 +20,7 @@ export default function Home() {
           src={heroImg}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-[center_30%]"
+          className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
         />
         {/* Readability overlay so the headline stays legible over the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
