@@ -14,16 +14,21 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative isolate overflow-hidden bg-neutral-900 py-28 md:py-40">
+      <section className="relative isolate overflow-hidden bg-neutral-900 min-h-[85vh] flex items-center py-20">
         {/* Hero background photo */}
         <img
           src={heroImg}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+          className="absolute inset-0 -z-10 h-full w-full object-cover object-top"
         />
         {/* Readability overlay so the headline stays legible over the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
+        {/* Focused dark spotlight behind the headline so the text stays prominent */}
+        <div
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{ background: 'radial-gradient(ellipse 72% 60% at 50% 42%, rgba(0,0,0,0.62), rgba(0,0,0,0) 72%)' }}
+        />
         {/* Ambient light sweep — subtle continuous "live" motion across the hero */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheen" />
