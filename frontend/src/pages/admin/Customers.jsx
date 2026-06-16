@@ -54,8 +54,8 @@ export default function Customers() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button aria-label="Edit customer" onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
+          <button aria-label="Delete customer" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -105,11 +105,11 @@ function CustomerFormModal({ open, onClose, initial, onSubmit, loading }) {
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit(onSubmit)} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}>
       <form className="space-y-3">
         <div><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><Label required>Phone</Label><Input {...register('phone', { required: true })} placeholder="+92 300 1234567" /></div>
           <div><Label>Email</Label><Input type="email" {...register('email')} /></div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><Label>CNIC</Label><Input {...register('cnic')} placeholder="00000-0000000-0" /></div>
           <div><Label>Source</Label><Input {...register('source')} placeholder="walk-in, facebook…" /></div>
         </div>

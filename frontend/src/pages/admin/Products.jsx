@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -65,6 +65,15 @@ export default function Products() {
     } catch (err) { toast.error(apiErrorMessage(err, 'Failed to update visibility')); }
   };
 
+  // Quick toggle for the home-page "Featured Pieces" section. Note: a product only
+  // shows there when it is BOTH Featured and Published + visible on the storefront.
+  const handleToggleFeatured = async (r) => {
+    try {
+      await update({ id: r._id, isFeatured: !r.isFeatured }).unwrap();
+      toast.success(r.isFeatured ? 'Removed from Featured' : 'Added to Featured');
+    } catch (err) { toast.error(apiErrorMessage(err, 'Failed to update featured')); }
+  };
+
   const columns = [
     { key: 'name', label: 'Product', render: (r) => (
       <div className="flex items-center gap-3">
@@ -88,8 +97,13 @@ export default function Products() {
       </Select>
     ) },
     { key: 'display', label: 'Frontend', render: (r) => (
-      <button onClick={() => handleToggleDisplay(r)} className="inline-flex items-center gap-1.5">
+      <button onClick={() => handleToggleDisplay(r)} className="inline-flex items-center gap-1.5" title="Show / hide on storefront">
         {r.displayOnFrontend ? <Eye className="h-4 w-4 text-emerald-600" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+      </button>
+    ) },
+    { key: 'featured', label: 'Featured', render: (r) => (
+      <button onClick={() => handleToggleFeatured(r)} className="inline-flex items-center" title="Toggle 'Featured Pieces' on the home page">
+        <Star className={`h-4 w-4 ${r.isFeatured ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'}`} />
       </button>
     ) },
     { key: 'sold', label: 'Sold', render: (r) => r.totalSold || 0 },
@@ -151,7 +165,8 @@ function ProductFormModal({ open, onClose, initial, categories, stockItems, onSu
       category: initial.categories?.[0]?._id || '', stockItem: initial.variants?.[0]?.stockItem?._id || initial.variants?.[0]?.stockItem || '',
       variantLabel: initial.variants?.[0]?.label || 'Default',
       displayOnFrontend: initial.displayOnFrontend, status: initial.status,
-    } : { name: '', brand: '', shortDescription: '', description: '', basePrice: '', salePrice: '', category: '', stockItem: '', variantLabel: 'Default', displayOnFrontend: false, status: 'draft' },
+      isFeatured: initial.isFeatured ?? false, isNew: initial.isNew ?? false, isBestseller: initial.isBestseller ?? false,
+    } : { name: '', brand: '', shortDescription: '', description: '', basePrice: '', salePrice: '', category: '', stockItem: '', variantLabel: 'Default', displayOnFrontend: false, status: 'draft', isFeatured: false, isNew: false, isBestseller: false },
   });
 
   const [images, setImages] = useState(initial?.images?.map((i) => ({ url: i.url, publicId: i.publicId })) || []);
@@ -174,18 +189,21 @@ function ProductFormModal({ open, onClose, initial, categories, stockItems, onSu
       images: images.map((img, i) => ({ url: img.url, publicId: img.publicId, isPrimary: i === 0 })),
       displayOnFrontend: v.displayOnFrontend,
       status: v.status,
+      isFeatured: v.isFeatured,
+      isNew: v.isNew,
+      isBestseller: v.isBestseller,
     });
   };
 
   return (
     <Modal open={open} onClose={onClose} title={initial ? 'Edit product' : 'New product'} size="lg"
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit(submit)} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
-        <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="sm:col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
         <div><Label>Brand</Label><Input {...register('brand')} /></div>
         <div><Label>Status</Label><Select {...register('status')}><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></Select></div>
-        <div className="col-span-2"><Label>Short description</Label><Input {...register('shortDescription')} /></div>
-        <div className="col-span-2"><Label>Full description</Label><Textarea rows={3} {...register('description')} /></div>
+        <div className="sm:col-span-2"><Label>Short description</Label><Input {...register('shortDescription')} /></div>
+        <div className="sm:col-span-2"><Label>Full description</Label><Textarea rows={3} {...register('description')} /></div>
         <div><Label required>Base price (Rs)</Label><Input type="number" {...register('basePrice', { required: true })} /></div>
         <div><Label>Sale price (Rs, optional)</Label><Input type="number" {...register('salePrice')} /></div>
         <div><Label required>Category</Label><Select {...register('category', { required: true })}>
@@ -196,14 +214,20 @@ function ProductFormModal({ open, onClose, initial, categories, stockItems, onSu
           <option value="">Choose…</option>
           {stockItems.map((s) => <option key={s._id} value={s._id}>{s.name} ({s.sku})</option>)}
         </Select></div>
-        <div className="col-span-2"><Label>Variant label</Label><Input {...register('variantLabel')} placeholder="Default / Red - L" /></div>
-        <div className="col-span-2">
+        <div className="sm:col-span-2"><Label>Variant label</Label><Input {...register('variantLabel')} placeholder="Default / Red - L" /></div>
+        <div className="sm:col-span-2">
           <Label>Images (first one becomes the primary)</Label>
           <ImageUploader value={images} onChange={setImages} category="products" max={6} />
         </div>
-        <label className="col-span-2 flex items-center gap-2 text-sm">
-          <input type="checkbox" {...register('displayOnFrontend')} /> Show on storefront
-        </label>
+        <div className="sm:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('displayOnFrontend')} /> Show on storefront</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('isFeatured')} /> Featured</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('isNew')} /> New arrival</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('isBestseller')} /> Bestseller</label>
+        </div>
+        <p className="sm:col-span-2 text-xs text-muted-foreground">
+          “Featured Pieces” on the home page shows products that are <strong>Featured</strong> and <strong>Published</strong> with storefront visibility on.
+        </p>
       </form>
     </Modal>
   );

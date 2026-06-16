@@ -9,6 +9,7 @@ import Home from '@/pages/storefront/Home';
 import Login from '@/pages/storefront/Login';
 import Register from '@/pages/storefront/Register';
 import About from '@/pages/storefront/About';
+import Contact from '@/pages/storefront/Contact';
 import Products from '@/pages/storefront/Products';
 import ProductDetail from '@/pages/storefront/ProductDetail';
 import Cart from '@/pages/storefront/Cart';
@@ -48,6 +49,7 @@ export function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />

@@ -284,17 +284,19 @@ export default function Finance() {
         title="Finance"
         description="Revenue, expenses & profit overview"
         actions={
-          <Button onClick={downloadFullFinancePdf}>
-            <FileDown className="h-4 w-4 mr-2" /> Download full finance report (PDF)
+          <Button onClick={downloadFullFinancePdf} className="w-full sm:w-auto">
+            <FileDown className="h-4 w-4 mr-2" />
+            <span className="sm:hidden">Finance report (PDF)</span>
+            <span className="hidden sm:inline">Download full finance report (PDF)</span>
           </Button>
         }
       />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Net income</div><div className="text-2xl font-semibold text-primary">{formatPrice(o.revenue.netIncome)}</div></div><Wallet className="h-8 w-8 text-primary" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Total expenses</div><div className="text-2xl font-semibold text-destructive">{formatPrice(o.expenses.totalExpenses)}</div></div><CreditCard className="h-8 w-8 text-destructive" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Gross profit</div><div className={`text-2xl font-semibold ${o.summary.grossProfit >= 0 ? 'text-emerald-600' : 'text-destructive'}`}>{formatPrice(o.summary.grossProfit)}</div></div>{o.summary.grossProfit >= 0 ? <TrendingUp className="h-8 w-8 text-emerald-600" /> : <TrendingDown className="h-8 w-8 text-destructive" />}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Margin</div><div className="text-2xl font-semibold">{o.summary.marginPercent}%</div></div></div></CardContent></Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Net income</div><div className="text-xl sm:text-2xl font-semibold text-primary">{formatPrice(o.revenue.netIncome)}</div></div><Wallet className="h-8 w-8 text-primary" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Total expenses</div><div className="text-xl sm:text-2xl font-semibold text-destructive">{formatPrice(o.expenses.totalExpenses)}</div></div><CreditCard className="h-8 w-8 text-destructive" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Gross profit</div><div className={`text-xl sm:text-2xl font-semibold ${o.summary.grossProfit >= 0 ? 'text-emerald-600' : 'text-destructive'}`}>{formatPrice(o.summary.grossProfit)}</div></div>{o.summary.grossProfit >= 0 ? <TrendingUp className="h-8 w-8 text-emerald-600" /> : <TrendingDown className="h-8 w-8 text-destructive" />}</div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-start justify-between"><div><div className="text-xs text-muted-foreground">Margin</div><div className="text-xl sm:text-2xl font-semibold">{o.summary.marginPercent}%</div></div></div></CardContent></Card>
       </div>
 
       <Card className="mb-6">

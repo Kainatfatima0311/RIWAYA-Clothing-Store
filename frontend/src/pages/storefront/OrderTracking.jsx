@@ -99,7 +99,7 @@ export default function OrderTracking() {
           {data.data.courier?.trackingNumber && (
             <Card>
               <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <Truck className="h-6 w-6 text-primary" />
                   <div className="flex-1">
                     <div className="font-semibold text-sm">Shipped via {data.data.courier.name || 'Courier'}</div>

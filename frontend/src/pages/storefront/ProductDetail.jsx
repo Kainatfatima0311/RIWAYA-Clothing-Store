@@ -171,7 +171,7 @@ export default function ProductDetail() {
           {product.specifications?.length > 0 && (
             <div className="border-t pt-6 mt-6">
               <h2 className="font-semibold mb-3">Specifications</h2>
-              <dl className="grid grid-cols-2 gap-2 text-sm">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
                 {product.specifications.map((s, i) => (
                   <div key={i} className="contents">
                     <dt className="text-muted-foreground">{s.label}</dt>

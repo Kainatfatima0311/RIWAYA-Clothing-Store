@@ -171,7 +171,7 @@ export default function AdminLayout() {
           <div className="text-sm text-muted-foreground hidden md:block">
             Welcome back, <span className="font-medium text-foreground">{user?.name?.split(' ')[0]}</span>
           </div>
-          <div />
+          <Link to="/admin" className="lg:hidden font-serif text-lg text-primary">{BRAND_NAME}</Link>
         </header>
 
         <main className="flex-1 p-4 lg:p-6 max-w-full">

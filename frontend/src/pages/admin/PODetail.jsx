@@ -49,7 +49,7 @@ export default function PODetail() {
         title={po.poNumber}
         description={`Created ${formatDate(po.orderDate)} for ${po.supplier?.name}`}
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {po.status === 'draft' && (
               <Button onClick={async () => { try { await approve(id).unwrap(); toast.success('PO approved'); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={approving}>
                 <CheckCircle2 className="h-4 w-4 mr-1" /> Approve
@@ -79,7 +79,8 @@ export default function PODetail() {
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold mb-3">Line items</h2>
-              <table className="w-full text-sm">
+              <div className="overflow-x-auto -mx-2 px-2">
+              <table className="w-full min-w-[480px] text-sm">
                 <thead className="border-b text-muted-foreground">
                   <tr>
                     <th className="text-left py-2">Item</th>
@@ -108,6 +109,7 @@ export default function PODetail() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </CardContent>
           </Card>
 

@@ -135,8 +135,8 @@ function EquipmentFormModal({ open, onClose, initial, categories, warehouses, on
         condition: v.condition, vendor: { name: v.vendorName, phone: v.vendorPhone },
         invoiceNumber: v.invoiceNumber || undefined, notes: v.notes || undefined,
       }))} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
-        <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} placeholder="HP LaserJet Pro M1136" /></div>
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="sm:col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} placeholder="HP LaserJet Pro M1136" /></div>
         <div><Label>Brand</Label><Input {...register('brand')} /></div>
         <div><Label>Model</Label><Input {...register('model')} /></div>
         <div><Label>Serial #</Label><Input {...register('serialNumber')} /></div>
@@ -149,8 +149,8 @@ function EquipmentFormModal({ open, onClose, initial, categories, warehouses, on
         <div><Label>Warranty (months)</Label><Input type="number" {...register('warrantyMonths')} /></div>
         <div><Label>Vendor name</Label><Input {...register('vendorName')} /></div>
         <div><Label>Vendor phone</Label><Input {...register('vendorPhone')} /></div>
-        <div className="col-span-2"><Label>Invoice number</Label><Input {...register('invoiceNumber')} /></div>
-        <div className="col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
+        <div className="sm:col-span-2"><Label>Invoice number</Label><Input {...register('invoiceNumber')} /></div>
+        <div className="sm:col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
       </form>
     </Modal>
   );

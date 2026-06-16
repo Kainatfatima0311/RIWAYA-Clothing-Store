@@ -135,8 +135,8 @@ function StockItemFormModal({ open, onClose, initial, suppliers, rackCategories,
   return (
     <Modal open={open} onClose={onClose} title={initial ? 'Edit stock item' : 'New stock item'} size="lg"
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ ...v, rackCategory: v.rackCategory || undefined, supplier: v.supplier || undefined, unitCost: Number(v.unitCost), minStockLevel: Number(v.minStockLevel), reorderLevel: Number(v.reorderLevel) }))} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
-        <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="sm:col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
         <div><Label>SKU (auto if blank)</Label><Input {...register('sku')} placeholder="SKU-00001" /></div>
         <div><Label>Unit</Label><Select {...register('unit')}>{['pcs','mtr','kg','dozens','suits'].map((u) => <option key={u} value={u}>{u}</option>)}</Select></div>
         <div><Label>Rack category</Label><Select {...register('rackCategory')}><option value="">—</option>{rackCategories.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}</Select></div>
@@ -144,7 +144,7 @@ function StockItemFormModal({ open, onClose, initial, suppliers, rackCategories,
         <div><Label>Unit cost (Rs)</Label><Input type="number" {...register('unitCost')} /></div>
         <div><Label>Min stock level</Label><Input type="number" {...register('minStockLevel')} /></div>
         <div><Label>Reorder level</Label><Input type="number" {...register('reorderLevel')} /></div>
-        <div className="col-span-2"><Label>Description</Label><Textarea rows={2} {...register('description')} /></div>
+        <div className="sm:col-span-2"><Label>Description</Label><Textarea rows={2} {...register('description')} /></div>
       </form>
     </Modal>
   );

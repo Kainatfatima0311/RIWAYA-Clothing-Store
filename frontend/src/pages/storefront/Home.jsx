@@ -3,6 +3,9 @@ import { Sparkles, ShieldCheck, Truck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useStorefrontFeaturedQuery, useStorefrontCategoriesQuery } from '@/api/productApi';
 import { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
+// Imported (not a /public path) so Vite bundles it with a content-hashed filename —
+// guaranteed to resolve on Vercel regardless of base path.
+import heroImg from '@/assets/home1.jpeg';
 
 export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
@@ -10,19 +13,28 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative bg-gradient-to-br from-primary/10 via-accent/10 to-background py-20 md:py-28">
-        <div className="container text-center">
-          <p className="text-sm uppercase tracking-[0.3em] text-primary mb-4">A timeless tradition</p>
-          <h1 className="font-serif text-5xl md:text-7xl text-balance leading-tight">
+      <section className="relative isolate overflow-hidden bg-neutral-900 py-28 md:py-40">
+        {/* Hero background photo */}
+        <img
+          src={heroImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+        />
+        {/* Readability overlay so the headline stays legible over the photo */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
+        <div className="container text-center text-white">
+          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4">A timeless tradition</p>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
             Crafted in heritage,<br />
-            <span className="text-primary">worn with pride.</span>
+            <span className="text-accent">worn with pride.</span>
           </h1>
-          <p className="mt-6 text-muted-foreground max-w-xl mx-auto">
+          <p className="mt-6 text-white/85 max-w-xl mx-auto">
             RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
-            <Link to="/about"><Button size="lg" variant="outline">Our story</Button></Link>
+            <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground">Our story</Button></Link>
           </div>
         </div>
       </section>
@@ -47,24 +59,40 @@ export default function Home() {
             <h2 className="font-serif text-3xl md:text-4xl">Shop by Category</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.data.slice(0, 8).map((cat) => (
-              <Link
-                key={cat._id}
-                to={`/products?category=${cat._id}`}
-                className="group relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center text-center p-4 hover:shadow-lg transition-shadow"
-              >
-                <div>
-                  <div className="font-serif text-xl text-primary">{cat.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{cat.productCount || 0} items</div>
-                </div>
-              </Link>
-            ))}
+            {categories.data.slice(0, 8).map((cat) => {
+              const hasImage = !!cat.image?.url;
+              return (
+                <Link
+                  key={cat._id}
+                  to={`/products?category=${cat._id}`}
+                  className="group relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center text-center p-4 hover:shadow-lg transition-shadow"
+                >
+                  {hasImage && (
+                    <>
+                      <img
+                        src={cat.image.url}
+                        alt={cat.name}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                      {/* Dark overlay so the title stays legible over any photo */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    </>
+                  )}
+                  <div className="relative">
+                    <div className={`font-serif text-xl ${hasImage ? 'text-white drop-shadow' : 'text-primary'}`}>{cat.name}</div>
+                    <div className={`text-xs mt-1 ${hasImage ? 'text-white/80' : 'text-muted-foreground'}`}>{cat.productCount || 0} items</div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
 
       <section className="container py-16 border-t">
-        <div className="flex items-end justify-between mb-8">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-8">
           <div>
             <h2 className="font-serif text-3xl md:text-4xl">Featured Pieces</h2>
             <p className="text-muted-foreground mt-1">Hand-picked for the season</p>

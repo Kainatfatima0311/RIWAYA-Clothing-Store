@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Image as ImageIcon, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import {
@@ -13,6 +13,7 @@ import { DataTable } from '@/components/admin/DataTable';
 import { FilterBar } from '@/components/admin/FilterBar';
 import { Modal } from '@/components/admin/Modal';
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
+import { ImageUploader } from '@/components/admin/ImageUploader';
 import { Button } from '@/components/ui/Button';
 import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -53,7 +54,23 @@ export default function Categories() {
   };
 
   const columns = [
-    { key: 'name', label: 'Name', render: (r) => <span className="font-medium">{r.name}</span> },
+    {
+      key: 'image', label: '',
+      render: (r) => (
+        r.image?.url
+          ? <img src={r.image.url} alt="" className="h-10 w-10 rounded object-cover border" />
+          : <div className="h-10 w-10 rounded border bg-muted flex items-center justify-center"><ImageIcon className="h-4 w-4 text-muted-foreground" /></div>
+      ),
+    },
+    {
+      key: 'name', label: 'Name',
+      render: (r) => (
+        <span className="font-medium inline-flex items-center gap-1.5">
+          {r.name}
+          {r.isFeatured && <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />}
+        </span>
+      ),
+    },
     { key: 'slug', label: 'Slug', render: (r) => <span className="font-mono text-xs">{r.slug}</span> },
     { key: 'parent', label: 'Parent', render: (r) => r.parent?.name || '—' },
     { key: 'products', label: 'Products', render: (r) => r.productCount || 0 },
@@ -115,25 +132,48 @@ export default function Categories() {
 }
 
 function CategoryFormModal({ open, onClose, initial, allCategories, onSubmit, loading }) {
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit } = useForm({
     values: initial ? {
       name: initial.name,
       description: initial.description || '',
       parent: initial.parent?._id || '',
       displayOnFrontend: initial.displayOnFrontend ?? true,
-      displayOrder: initial.displayOrder || 0,
+      displayOrder: initial.displayOrder ?? 0,
+      isFeatured: initial.isFeatured ?? false,
       isActive: initial.isActive ?? true,
-    } : { name: '', description: '', parent: '', displayOnFrontend: true, displayOrder: 0, isActive: true },
+    } : { name: '', description: '', parent: '', displayOnFrontend: true, displayOrder: 0, isFeatured: false, isActive: true },
   });
+
+  // Category image is a single { url, publicId } — managed outside react-hook-form
+  // since <ImageUploader> is a controlled component. Re-sync whenever the row changes.
+  const [image, setImage] = useState([]);
+  useEffect(() => {
+    setImage(initial?.image?.url ? [{ url: initial.image.url, publicId: initial.image.publicId || '' }] : []);
+  }, [initial, open]);
+
+  const submit = handleSubmit((v) =>
+    onSubmit({
+      ...v,
+      parent: v.parent || null,
+      displayOrder: Number(v.displayOrder) || 0,
+      image: image[0] || { url: '', publicId: '' },
+    })
+  );
 
   return (
     <Modal
       open={open} onClose={onClose}
       title={initial ? 'Edit category' : 'New category'}
-      footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ ...v, parent: v.parent || null }))} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}
+      footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={submit} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}
     >
       <form className="space-y-3">
         <div><Label required>Name</Label><Input {...register('name', { required: true, minLength: { value: 2, message: 'Name must be at least 2 characters' } })} placeholder="Bridal, Embroidered…" /></div>
+
+        <div>
+          <Label>Category image (shown in “Shop by Category” on the home page)</Label>
+          <ImageUploader value={image} onChange={setImage} category="categories" single />
+        </div>
+
         <div><Label>Parent (optional)</Label>
           <Select {...register('parent')}>
             <option value="">(Top-level)</option>
@@ -143,8 +183,10 @@ function CategoryFormModal({ open, onClose, initial, allCategories, onSubmit, lo
           </Select>
         </div>
         <div><Label>Description</Label><Textarea rows={2} {...register('description')} /></div>
-        <div className="grid grid-cols-2 gap-3">
+        <div><Label>Display order (lower shows first)</Label><Input type="number" {...register('displayOrder')} /></div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('displayOnFrontend')} /> Show on storefront</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('isFeatured')} /> Featured</label>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...register('isActive')} /> Active</label>
         </div>
       </form>

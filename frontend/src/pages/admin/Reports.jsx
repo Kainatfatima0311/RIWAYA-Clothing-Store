@@ -240,7 +240,7 @@ export default function Reports() {
         title="Reports"
         description="Sales, inventory, and activity insights — download as branded PDF"
         actions={
-          <Button onClick={downloadFullReportPdf}>
+          <Button onClick={downloadFullReportPdf} className="w-full sm:w-auto">
             <FileDown className="h-4 w-4 mr-2" /> Download full report (PDF)
           </Button>
         }

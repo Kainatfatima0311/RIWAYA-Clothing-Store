@@ -53,8 +53,8 @@ export default function Suppliers() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button aria-label="Edit supplier" onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
+          <button aria-label="Delete supplier" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -102,18 +102,18 @@ function SupplierFormModal({ open, onClose, initial, onSubmit, loading }) {
   return (
     <Modal open={open} onClose={onClose} title={initial ? 'Edit supplier' : 'New supplier'} size="lg"
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ ...v, address: { city: v.city, line1: v.line1 } }))} loading={loading}>{initial ? 'Save' : 'Create'}</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
-        <div className="col-span-2"><Label required>Supplier name</Label><Input {...register('name', { required: true })} /></div>
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="sm:col-span-2"><Label required>Supplier name</Label><Input {...register('name', { required: true })} /></div>
         <div><Label>Type</Label><Select {...register('type')}>{['mill','distributor','individual','wholesaler','other'].map((t) => <option key={t} value={t}>{t}</option>)}</Select></div>
         <div><Label required>Phone</Label><Input {...register('phone', { required: true })} /></div>
         <div><Label>Contact person</Label><Input {...register('contactPerson')} /></div>
         <div><Label>Email</Label><Input type="email" {...register('email')} /></div>
-        <div className="col-span-2"><Label>Address</Label><Input {...register('line1')} /></div>
+        <div className="sm:col-span-2"><Label>Address</Label><Input {...register('line1')} /></div>
         <div><Label>City</Label><Input {...register('city')} /></div>
         <div><Label>Payment terms</Label><Input {...register('paymentTerms')} placeholder="Net 30, 50% advance…" /></div>
         <div><Label>NTN</Label><Input {...register('ntn')} /></div>
         <div><Label>GST</Label><Input {...register('gst')} /></div>
-        <div className="col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
+        <div className="sm:col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
       </form>
     </Modal>
   );

@@ -52,7 +52,7 @@ export default function Dashboard() {
       {/* Today */}
       <section>
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Today</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Tile icon={ShoppingBag} label="Orders" value={d.today.orders} />
           <Tile icon={Wallet} label="Revenue booked" value={formatPrice(d.today.revenue)} />
           <Tile icon={Wallet} label="Payments received" value={formatPrice(d.today.paymentsReceived)} sub={`${d.today.paymentCount} payments`} />
@@ -63,7 +63,7 @@ export default function Dashboard() {
       {/* Month */}
       <section>
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">This Month</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Tile icon={ShoppingBag} label="Orders" value={d.month.orders} />
           <Tile icon={Wallet} label="Revenue" value={formatPrice(d.month.revenue)} />
           <Tile icon={Wallet} label="Collected" value={formatPrice(d.month.paymentsReceived)} sub={`${d.month.paymentCount} payments`} />
@@ -75,14 +75,14 @@ export default function Dashboard() {
       <section className="grid lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader><CardTitle className="text-base">Inventory health</CardTitle></CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Tile icon={AlertTriangle} label="Out of stock" value={d.inventory.outOfStock} tone="danger" />
             <Tile icon={Boxes} label="Low stock" value={d.inventory.lowStock} tone="warn" />
           </CardContent>
         </Card>
         <Card>
           <CardHeader><CardTitle className="text-base">Operations</CardTitle></CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Tile icon={Truck} label="Shipped orders" value={d.operations.shippedOrders} />
             <Tile icon={Truck} label="Open POs" value={d.operations.openPurchaseOrders} />
           </CardContent>
@@ -90,7 +90,7 @@ export default function Dashboard() {
       </section>
 
       {/* Catalog + People */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Tile icon={Package} label="Published products" value={d.catalog.publishedProducts} />
         <Tile icon={WarehouseIcon} label="Warehouses" value={d.catalog.warehouses} />
         <Tile icon={Users} label="Total customers" value={d.people.totalCustomers} />

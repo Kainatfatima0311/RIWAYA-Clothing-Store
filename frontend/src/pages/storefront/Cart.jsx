@@ -89,7 +89,7 @@ export default function Cart() {
             return (
               <Card key={item._id}>
                 <CardContent className="p-4 flex gap-4">
-                  <Link to={`/products/${product?.slug}`} className="w-24 h-32 bg-muted rounded overflow-hidden flex-shrink-0">
+                  <Link to={`/products/${product?.slug}`} className="w-20 h-28 sm:w-24 sm:h-32 bg-muted rounded overflow-hidden flex-shrink-0">
                     {img && <img src={img} alt={product?.name} className="w-full h-full object-cover" />}
                   </Link>
                   <div className="flex-1 min-w-0">
@@ -100,7 +100,7 @@ export default function Cart() {
                       <div className="text-sm text-muted-foreground mt-1">{variant.label}</div>
                     )}
                     <div className="text-sm font-semibold mt-2">{formatPrice(unitPrice)}</div>
-                    <div className="flex items-center justify-between mt-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
                       <div className="flex items-center border rounded-md">
                         <button onClick={() => handleQtyChange(item._id, item.quantity - 1)} className="p-1.5 hover:bg-accent/30">
                           <Minus className="h-3.5 w-3.5" />

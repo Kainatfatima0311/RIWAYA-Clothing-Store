@@ -14,6 +14,7 @@ const NAV = [
   { to: '/', label: 'Home' },
   { to: '/products', label: 'Shop' },
   { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export default function StorefrontLayout() {
@@ -44,7 +45,7 @@ export default function StorefrontLayout() {
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
         <div className="container flex items-center justify-between h-16">
-          <Link to="/" className="font-serif text-2xl font-semibold tracking-wide text-primary">
+          <Link to="/" className="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-primary truncate min-w-0">
             {BRAND_NAME}
           </Link>
 
@@ -56,7 +57,7 @@ export default function StorefrontLayout() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <Link to="/products" className="p-2 rounded-md hover:bg-accent/30" aria-label="Search">
               <Search className="h-5 w-5" />
             </Link>
@@ -94,14 +95,14 @@ export default function StorefrontLayout() {
                 Sign in
               </Link>
             )}
-            <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
+            <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} aria-controls="mobile-nav">
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
         {/* Mobile nav */}
-        <div className={cn('md:hidden border-t', open ? 'block' : 'hidden')}>
+        <div id="mobile-nav" className={cn('md:hidden border-t', open ? 'block' : 'hidden')}>
           <div className="container py-3 flex flex-col gap-2">
             {NAV.map((n) => (
               <Link
@@ -162,6 +163,7 @@ export default function StorefrontLayout() {
             <h4 className="font-semibold mb-3 text-sm">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/about" className="hover:text-primary">About Us</Link></li>
+              <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
             </ul>
           </div>
         </div>

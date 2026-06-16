@@ -119,7 +119,7 @@ function EmployeeFormModal({ open, onClose, initial, onSubmit, loading }) {
   return (
     <Modal open={open} onClose={onClose} title={initial ? 'Edit employee' : 'Add employee'} size="lg"
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={handleSubmit((v) => onSubmit({ ...v, salary: Number(v.salary) }))} loading={loading}>{initial ? 'Save' : 'Add'}</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2"><Label required>Name</Label><Input {...register('name', { required: true })} /></div>
         <div><Label required>Phone</Label><Input {...register('phone', { required: true })} /></div>
         <div><Label>Email</Label><Input type="email" {...register('email')} /></div>

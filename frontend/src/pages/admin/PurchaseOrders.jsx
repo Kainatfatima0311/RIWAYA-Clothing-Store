@@ -50,8 +50,8 @@ export default function PurchaseOrders() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => navigate(`/admin/purchase-orders/${r._id}`)} className="p-1.5 hover:bg-accent/30 rounded"><Eye className="h-4 w-4" /></button>
-          {r.status === 'draft' && <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>}
+          <button aria-label="View purchase order" onClick={() => navigate(`/admin/purchase-orders/${r._id}`)} className="p-1.5 hover:bg-accent/30 rounded"><Eye className="h-4 w-4" /></button>
+          {r.status === 'draft' && <button aria-label="Delete purchase order" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>}
         </div>
       ),
     },
@@ -103,22 +103,22 @@ function POFormModal({ open, onClose, suppliers, warehouses, onSubmit, loading }
         notes: v.notes,
         items: [{ name: v.itemName, quantityOrdered: Number(v.itemQty), unitPrice: Number(v.itemPrice), unit: v.itemUnit }],
       }))} loading={loading}>Create draft</Button></>}>
-      <form className="grid grid-cols-2 gap-3">
+      <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div><Label required>Supplier</Label><Select {...register('supplier', { required: true })}><option value="">Choose…</option>{suppliers.map((s) => <option key={s._id} value={s._id}>{s.name}</option>)}</Select></div>
         <div><Label required>Warehouse</Label><Select {...register('warehouse', { required: true })}><option value="">Choose…</option>{warehouses.map((w) => <option key={w._id} value={w._id}>{w.name}</option>)}</Select></div>
-        <div className="col-span-2"><Label>Expected delivery</Label><Input type="date" {...register('expectedDeliveryDate')} /></div>
+        <div className="sm:col-span-2"><Label>Expected delivery</Label><Input type="date" {...register('expectedDeliveryDate')} /></div>
 
-        <div className="col-span-2 mt-2"><div className="text-sm font-medium mb-1">First item</div></div>
-        <div className="col-span-2"><Label required>Item name</Label><Input {...register('itemName', { required: true })} placeholder="Embroidered Bridal Suit" /></div>
+        <div className="sm:col-span-2 mt-2"><div className="text-sm font-medium mb-1">First item</div></div>
+        <div className="sm:col-span-2"><Label required>Item name</Label><Input {...register('itemName', { required: true })} placeholder="Embroidered Bridal Suit" /></div>
         <div><Label>Quantity</Label><Input type="number" {...register('itemQty')} /></div>
         <div><Label>Unit price (Rs)</Label><Input type="number" {...register('itemPrice')} /></div>
         <div><Label>Unit</Label><Select {...register('itemUnit')}>{['pcs','mtr','kg','dozens','suits'].map((u) => <option key={u} value={u}>{u}</option>)}</Select></div>
 
-        <div className="col-span-2 mt-2"><div className="text-sm font-medium mb-1">Charges</div></div>
+        <div className="sm:col-span-2 mt-2"><div className="text-sm font-medium mb-1">Charges</div></div>
         <div><Label>Tax rate (%)</Label><Input type="number" {...register('taxRate')} /></div>
         <div><Label>Shipping cost (Rs)</Label><Input type="number" {...register('shippingCost')} /></div>
         <div><Label>Discount (Rs)</Label><Input type="number" {...register('discount')} /></div>
-        <div className="col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
+        <div className="sm:col-span-2"><Label>Notes</Label><Textarea rows={2} {...register('notes')} /></div>
       </form>
     </Modal>
   );

@@ -32,7 +32,7 @@ export default function Orders() {
     {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
-        <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/orders/${r._id}`); }} className="p-1.5 hover:bg-accent/30 rounded">
+        <button aria-label="View order" onClick={(e) => { e.stopPropagation(); navigate(`/admin/orders/${r._id}`); }} className="p-1.5 hover:bg-accent/30 rounded">
           <Eye className="h-4 w-4" />
         </button>
       ),
