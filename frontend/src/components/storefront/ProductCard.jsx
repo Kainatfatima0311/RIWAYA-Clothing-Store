@@ -61,7 +61,7 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group block bg-card rounded-lg overflow-hidden border hover:shadow-lg transition-shadow"
+      className="group block bg-card rounded-lg overflow-hidden border hover-lift hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
     >
       {/* Image */}
       <div className="relative aspect-[3/4] bg-muted overflow-hidden">
@@ -82,7 +82,7 @@ export function ProductCard({ product }) {
         <div className="absolute top-2 right-2 flex flex-col gap-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={handleAddToWishlist}
-            className="h-8 w-8 rounded-full bg-background/95 hover:bg-background flex items-center justify-center shadow"
+            className="h-8 w-8 rounded-full bg-background/95 hover:bg-background flex items-center justify-center shadow transition-colors"
             aria-label="Add to wishlist"
           >
             <Heart className="h-4 w-4" />
@@ -90,7 +90,7 @@ export function ProductCard({ product }) {
           <button
             onClick={handleAddToCart}
             disabled={adding}
-            className="h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center shadow disabled:opacity-50"
+            className="h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center shadow disabled:opacity-50 transition-colors"
             aria-label="Add to cart"
           >
             <ShoppingBag className="h-4 w-4" />

@@ -77,7 +77,7 @@ export default function Categories() {
     {
       key: 'display', label: 'Frontend',
       render: (r) => (
-        <button onClick={() => toggleDisplay(r)} className="inline-flex items-center gap-1.5">
+        <button onClick={() => toggleDisplay(r)} className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground">
           {r.displayOnFrontend ? <Eye className="h-4 w-4 text-emerald-600" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
           <span className="text-xs">{r.displayOnFrontend ? 'Visible' : 'Hidden'}</span>
         </button>
@@ -91,8 +91,8 @@ export default function Categories() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -100,11 +100,13 @@ export default function Categories() {
 
   return (
     <div>
-      <PageHeader
-        title="Product Categories"
-        description="Tree-structured categories. Toggle frontend visibility per category."
-        actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New category</Button>}
-      />
+      <div className="animate-fade-up">
+        <PageHeader
+          title="Product Categories"
+          description="Tree-structured categories. Toggle frontend visibility per category."
+          actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New category</Button>}
+        />
+      </div>
       <FilterBar search={search} onSearch={setSearch} placeholder="Search categories" />
       <DataTable columns={columns} data={all} loading={isLoading} />
 

@@ -87,8 +87,8 @@ export default function Payments() {
     <div>
       <PageHeader title="Payments" description="Approve customer payments, manage refunds, track all transactions" />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className={pendingCount > 0 ? 'border-amber-300 bg-amber-50/40' : ''}>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 animate-fade-up">
+        <Card className={`hover-lift ${pendingCount > 0 ? 'border-amber-300 bg-amber-50/40' : ''}`}>
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
@@ -97,7 +97,7 @@ export default function Payments() {
                 {pendingCount > 0 && (
                   <button
                     onClick={() => setFilters({ ...filters, status: 'pending' })}
-                    className="text-xs text-amber-700 hover:underline mt-1"
+                    className="text-xs text-amber-700 hover:underline transition-colors mt-1"
                   >
                     Review now →
                   </button>
@@ -107,9 +107,9 @@ export default function Payments() {
             </div>
           </CardContent>
         </Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Completed payments</div><div className="text-2xl font-semibold">{summary.totalPayments}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total collected</div><div className="text-2xl font-semibold text-primary">{formatPrice(summary.totalAmount)}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground mb-2">By method</div><div className="space-y-1 text-xs">{byMethod.slice(0, 4).map((m) => <div key={m._id} className="flex justify-between"><span className="capitalize">{m._id?.replace(/_/g, ' ')}</span><span>{formatPrice(m.value)}</span></div>)}{!byMethod.length && <div className="text-muted-foreground">No data yet</div>}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Completed payments</div><div className="text-2xl font-semibold">{summary.totalPayments}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total collected</div><div className="text-2xl font-semibold text-primary">{formatPrice(summary.totalAmount)}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground mb-2">By method</div><div className="space-y-1 text-xs">{byMethod.slice(0, 4).map((m) => <div key={m._id} className="flex justify-between"><span className="capitalize">{m._id?.replace(/_/g, ' ')}</span><span>{formatPrice(m.value)}</span></div>)}{!byMethod.length && <div className="text-muted-foreground">No data yet</div>}</div></CardContent></Card>
       </div>
 
       <FilterBar>

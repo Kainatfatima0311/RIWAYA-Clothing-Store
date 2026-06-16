@@ -40,8 +40,8 @@ export default function PODetail() {
   if (!po) return <p>PO not found</p>;
 
   return (
-    <div>
-      <Link to="/admin/purchase-orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+    <div className="animate-fade-up">
+      <Link to="/admin/purchase-orders" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 mb-4">
         <ArrowLeft className="h-4 w-4" /> All POs
       </Link>
 
@@ -159,7 +159,7 @@ export default function PODetail() {
 
         {/* Sidebar summary */}
         <aside>
-          <Card className="sticky top-20">
+          <Card className="sticky top-20 hover-lift">
             <CardContent className="pt-6 space-y-3 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(po.subtotal)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Tax ({po.taxRate}%)</span><span>{formatPrice(po.taxAmount)}</span></div>

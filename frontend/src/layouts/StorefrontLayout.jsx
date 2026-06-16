@@ -30,6 +30,11 @@ export default function StorefrontLayout() {
   const cartCount = cart?.data?.itemCount || 0;
   const wlCount = wl?.data?.itemCount || 0;
 
+  // My Orders + Track Order appear in the navbar only for signed-in customers.
+  const navItems = isAuth
+    ? [...NAV, { to: '/orders', label: 'My Orders' }, { to: '/track', label: 'Track Order' }]
+    : NAV;
+
   const handleLogout = async () => {
     try {
       await logout().unwrap();
@@ -50,18 +55,22 @@ export default function StorefrontLayout() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
-            {NAV.map((n) => (
-              <Link key={n.to} to={n.to} className="text-sm font-medium hover:text-primary transition-colors">
+            {navItems.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                className="relative text-sm font-medium transition-colors hover:text-primary after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
+              >
                 {n.label}
               </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <Link to="/products" className="p-2 rounded-md hover:bg-accent/30" aria-label="Search">
+            <Link to="/products" className="p-2 rounded-md transition-colors hover:bg-accent/30" aria-label="Search">
               <Search className="h-5 w-5" />
             </Link>
-            <Link to="/wishlist" className="p-2 rounded-md hover:bg-accent/30 relative" aria-label="Wishlist">
+            <Link to="/wishlist" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Wishlist">
               <Heart className="h-5 w-5" />
               {wlCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
@@ -69,7 +78,7 @@ export default function StorefrontLayout() {
                 </span>
               )}
             </Link>
-            <Link to="/cart" className="p-2 rounded-md hover:bg-accent/30 relative" aria-label="Cart">
+            <Link to="/cart" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Cart">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
@@ -79,18 +88,18 @@ export default function StorefrontLayout() {
             </Link>
             {isAuth ? (
               <div className="hidden md:flex items-center gap-2 ml-2">
-                <Link to="/profile" className="p-2 rounded-md hover:bg-accent/30 flex items-center gap-2">
+                <Link to="/profile" className="p-2 rounded-md transition-colors hover:bg-accent/30 flex items-center gap-2">
                   <User className="h-5 w-5" />
                   <span className="text-sm font-medium hidden lg:inline">{user?.name?.split(' ')[0]}</span>
                 </Link>
-                <button onClick={handleLogout} className="p-2 rounded-md hover:bg-accent/30" aria-label="Logout">
+                <button onClick={handleLogout} className="p-2 rounded-md transition-colors hover:bg-accent/30" aria-label="Logout">
                   <LogOut className="h-5 w-5" />
                 </button>
               </div>
             ) : (
               <Link
                 to="/login"
-                className="hidden md:inline text-sm font-medium px-3 py-2 rounded-md hover:bg-accent/30"
+                className="hidden md:inline text-sm font-medium px-3 py-2 rounded-md transition-colors hover:bg-accent/30"
               >
                 Sign in
               </Link>
@@ -102,29 +111,29 @@ export default function StorefrontLayout() {
         </div>
 
         {/* Mobile nav */}
-        <div id="mobile-nav" className={cn('md:hidden border-t', open ? 'block' : 'hidden')}>
+        <div id="mobile-nav" className={cn('md:hidden border-t', open ? 'block animate-fade-down' : 'hidden')}>
           <div className="container py-3 flex flex-col gap-2">
-            {NAV.map((n) => (
+            {navItems.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm font-medium"
+                className="py-2 text-sm font-medium transition-colors hover:text-primary"
               >
                 {n.label}
               </Link>
             ))}
             {isAuth ? (
               <>
-                <Link to="/profile" onClick={() => setOpen(false)} className="py-2 text-sm font-medium">
+                <Link to="/profile" onClick={() => setOpen(false)} className="py-2 text-sm font-medium transition-colors hover:text-primary">
                   Profile
                 </Link>
-                <button onClick={handleLogout} className="py-2 text-sm font-medium text-left">
+                <button onClick={handleLogout} className="py-2 text-sm font-medium text-left transition-colors hover:text-primary">
                   Logout
                 </button>
               </>
             ) : (
-              <Link to="/login" onClick={() => setOpen(false)} className="py-2 text-sm font-medium">
+              <Link to="/login" onClick={() => setOpen(false)} className="py-2 text-sm font-medium transition-colors hover:text-primary">
                 Sign in
               </Link>
             )}
@@ -147,23 +156,23 @@ export default function StorefrontLayout() {
           <div>
             <h4 className="font-semibold mb-3 text-sm">Shop</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/products" className="hover:text-primary">All Products</Link></li>
-              <li><Link to="/products?featured=true" className="hover:text-primary">Featured</Link></li>
+              <li><Link to="/products" className="transition-colors hover:text-primary">All Products</Link></li>
+              <li><Link to="/products?featured=true" className="transition-colors hover:text-primary">Featured</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-3 text-sm">Account</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/profile" className="hover:text-primary">My Profile</Link></li>
-              <li><Link to="/orders" className="hover:text-primary">My Orders</Link></li>
-              <li><Link to="/track" className="hover:text-primary">Track Order</Link></li>
+              <li><Link to="/profile" className="transition-colors hover:text-primary">My Profile</Link></li>
+              <li><Link to="/orders" className="transition-colors hover:text-primary">My Orders</Link></li>
+              <li><Link to="/track" className="transition-colors hover:text-primary">Track Order</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-3 text-sm">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/about" className="hover:text-primary">About Us</Link></li>
-              <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
+              <li><Link to="/about" className="transition-colors hover:text-primary">About Us</Link></li>
+              <li><Link to="/contact" className="transition-colors hover:text-primary">Contact</Link></li>
             </ul>
           </div>
         </div>

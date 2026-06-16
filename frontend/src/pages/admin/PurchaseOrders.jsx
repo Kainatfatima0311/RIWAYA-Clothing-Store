@@ -50,8 +50,8 @@ export default function PurchaseOrders() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button aria-label="View purchase order" onClick={() => navigate(`/admin/purchase-orders/${r._id}`)} className="p-1.5 hover:bg-accent/30 rounded"><Eye className="h-4 w-4" /></button>
-          {r.status === 'draft' && <button aria-label="Delete purchase order" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>}
+          <button aria-label="View purchase order" onClick={() => navigate(`/admin/purchase-orders/${r._id}`)} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Eye className="h-4 w-4" /></button>
+          {r.status === 'draft' && <button aria-label="Delete purchase order" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>}
         </div>
       ),
     },
@@ -59,8 +59,10 @@ export default function PurchaseOrders() {
 
   return (
     <div>
-      <PageHeader title="Purchase Orders" description="Orders to mills with partial receiving and payment tracking"
-        actions={<Button onClick={() => setModalOpen(true)}><Plus className="h-4 w-4 mr-1" /> New PO</Button>} />
+      <div className="animate-fade-up">
+        <PageHeader title="Purchase Orders" description="Orders to mills with partial receiving and payment tracking"
+          actions={<Button onClick={() => setModalOpen(true)}><Plus className="h-4 w-4 mr-1" /> New PO</Button>} />
+      </div>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }} placeholder="Search PO number">
         <FilterField label="Status">

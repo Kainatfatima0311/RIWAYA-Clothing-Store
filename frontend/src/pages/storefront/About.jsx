@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Sparkles, ShieldCheck, Heart, Scissors, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Reveal } from '@/components/ui/Reveal';
 import { BRAND_NAME } from '@/lib/constants';
 // Imported so Vite content-hashes them → deployment-safe on Vercel.
 import about1 from '@/assets/about/about1.jpeg';
@@ -44,7 +45,7 @@ export default function About() {
 
       {/* Story */}
       <section className="container py-16 grid md:grid-cols-2 gap-10 items-center">
-        <div className="space-y-4 text-muted-foreground order-2 md:order-1">
+        <Reveal animation="fade-up" className="space-y-4 text-muted-foreground order-2 md:order-1">
           <h2 className="font-serif text-3xl text-foreground">Made by hand, just for you</h2>
           <p>
             What began as a small studio of embroiderers has grown into a house of bridal, formal and everyday wear.
@@ -55,8 +56,12 @@ export default function About() {
             modern shapes — so you feel both classic and modern at the same time.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            {PILLARS.map((p) => (
-              <div key={p.k} className="rounded-xl border bg-card p-4 text-center">
+            {PILLARS.map((p, i) => (
+              <div
+                key={p.k}
+                style={{ animationDelay: `${i * 60}ms` }}
+                className="rounded-xl border bg-card p-4 text-center animate-fade-up hover-lift"
+              >
                 <div className="font-serif text-xl text-primary">{p.k}</div>
                 <div className="text-xs text-muted-foreground mt-1">{p.v}</div>
               </div>
@@ -66,28 +71,35 @@ export default function About() {
             <Link to="/products"><Button>Shop the collection</Button></Link>
             <Link to="/contact"><Button variant="outline">Talk to us</Button></Link>
           </div>
-        </div>
-        <div className="order-1 md:order-2">
-          <img src={about3} alt="RIWAYA craftsmanship" className="w-full rounded-2xl object-cover aspect-[4/3] shadow-sm" />
-        </div>
+        </Reveal>
+        <Reveal animation="fade-up" delay={120} className="order-1 md:order-2">
+          <div className="overflow-hidden rounded-2xl shadow-sm group">
+            <img src={about3} alt="RIWAYA craftsmanship" className="w-full object-cover aspect-[4/3] transition-transform duration-500 group-hover:scale-105" />
+          </div>
+        </Reveal>
       </section>
 
       {/* Values */}
       <section className="border-t">
         <div className="container py-16">
-          <div className="text-center mb-10">
+          <Reveal animation="fade-up" className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl">What we stand for</h2>
             <p className="text-muted-foreground mt-2">The promises behind every {BRAND_NAME} piece.</p>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {VALUES.map((v) => (
-              <div key={v.title} className="rounded-xl border bg-card p-6">
+            {VALUES.map((v, i) => (
+              <Reveal
+                key={v.title}
+                animation="fade-up"
+                delay={i * 60}
+                className="rounded-xl border bg-card p-6 hover-lift"
+              >
                 <div className="rounded-full bg-primary/10 p-3 w-fit text-primary mb-4">
                   <v.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-semibold mb-1">{v.title}</h3>
                 <p className="text-sm text-muted-foreground">{v.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -96,13 +108,17 @@ export default function About() {
       {/* Atelier gallery */}
       <section className="border-t">
         <div className="container py-16">
-          <div className="text-center mb-10">
+          <Reveal animation="fade-up" className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl">Behind the scenes</h2>
             <p className="text-muted-foreground mt-2">A look at the people and work behind every order.</p>
-          </div>
+          </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <img src={about4} alt="RIWAYA order packing" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
-            <img src={about5} alt="RIWAYA warehouse" className="w-full rounded-2xl object-cover aspect-[16/10] shadow-sm" />
+            <Reveal animation="fade-up" className="overflow-hidden rounded-2xl shadow-sm hover-lift group">
+              <img src={about4} alt="RIWAYA order packing" className="w-full object-cover aspect-[16/10] transition-transform duration-500 group-hover:scale-105" />
+            </Reveal>
+            <Reveal animation="fade-up" delay={120} className="overflow-hidden rounded-2xl shadow-sm hover-lift group">
+              <img src={about5} alt="RIWAYA warehouse" className="w-full object-cover aspect-[16/10] transition-transform duration-500 group-hover:scale-105" />
+            </Reveal>
           </div>
         </div>
       </section>

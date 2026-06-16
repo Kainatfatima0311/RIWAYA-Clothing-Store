@@ -66,18 +66,18 @@ export default function ProductDetail() {
 
   return (
     <div className="container py-8">
-      <Link to="/products" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-6">
+      <Link to="/products" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 mb-6">
         <ArrowLeft className="h-4 w-4" /> Back to shop
       </Link>
 
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        <div>
-          <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden">
+        <div className="animate-fade-in">
+          <div className="group aspect-[3/4] bg-muted rounded-lg overflow-hidden">
             <ProductImage
               src={images[imgIdx]?.url}
               alt={product.name}
               fallbackLabel={product.name}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
           {images.length > 1 && (
@@ -86,16 +86,16 @@ export default function ProductDetail() {
                 <button
                   key={img._id || i}
                   onClick={() => setImgIdx(i)}
-                  className={cn('aspect-square rounded overflow-hidden border-2', i === imgIdx ? 'border-primary' : 'border-transparent opacity-70 hover:opacity-100')}
+                  className={cn('group aspect-square rounded overflow-hidden border-2 transition-all duration-300', i === imgIdx ? 'border-primary' : 'border-transparent opacity-70 hover:opacity-100')}
                 >
-                  <ProductImage src={img.url} alt="" className="h-full w-full object-cover" />
+                  <ProductImage src={img.url} alt="" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        <div>
+        <div className="animate-fade-up">
           {product.brand && <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{product.brand}</div>}
           <h1 className="font-serif text-3xl md:text-4xl mb-3">{product.name}</h1>
 
@@ -149,9 +149,9 @@ export default function ProductDetail() {
 
           <div className="flex items-center gap-3 mb-4">
             <div className="flex items-center border rounded-md">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-2 hover:bg-accent/30"><Minus className="h-4 w-4" /></button>
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-2 hover:bg-accent/30 transition-colors"><Minus className="h-4 w-4" /></button>
               <span className="px-4 font-medium">{qty}</span>
-              <button onClick={() => setQty((q) => Math.min(availableQty || 100, q + 1))} className="p-2 hover:bg-accent/30"><Plus className="h-4 w-4" /></button>
+              <button onClick={() => setQty((q) => Math.min(availableQty || 100, q + 1))} className="p-2 hover:bg-accent/30 transition-colors"><Plus className="h-4 w-4" /></button>
             </div>
             <Button onClick={handleAddToCart} loading={adding} disabled={availableQty <= 0} className="flex-1">
               <ShoppingBag className="h-4 w-4 mr-2" /> Add to cart

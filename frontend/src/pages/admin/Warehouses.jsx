@@ -59,8 +59,8 @@ export default function Warehouses() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={(e) => { e.stopPropagation(); openEdit(r); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={(e) => { e.stopPropagation(); setConfirmId(r._id); }} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={(e) => { e.stopPropagation(); openEdit(r); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={(e) => { e.stopPropagation(); setConfirmId(r._id); }} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -68,11 +68,13 @@ export default function Warehouses() {
 
   return (
     <div>
-      <PageHeader
-        title="Warehouses"
-        description="Locations, floors, racks and storage capacity"
-        actions={<Button onClick={openCreate}><Plus className="h-4 w-4 mr-1" /> New warehouse</Button>}
-      />
+      <div className="animate-fade-up">
+        <PageHeader
+          title="Warehouses"
+          description="Locations, floors, racks and storage capacity"
+          actions={<Button onClick={openCreate}><Plus className="h-4 w-4 mr-1" /> New warehouse</Button>}
+        />
+      </div>
       <FilterBar search={search} onSearch={(v) => { setSearch(v); setPage(1); }} placeholder="Search by name, code or city" />
       <DataTable
         columns={columns}

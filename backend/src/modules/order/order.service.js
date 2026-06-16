@@ -295,6 +295,15 @@ export const orderService = {
       });
     }
 
+    // Empty the customer's cart now that the order is placed. Best-effort: a
+    // cart-clear failure must never fail an order that is already saved.
+    try {
+      const { cartService } = await import('../cart/cart.service.js');
+      await cartService.clear(userId);
+    } catch (e) {
+      console.error(`Cart clear after order ${orderNumber} failed:`, e.message);
+    }
+
     return order;
   },
 

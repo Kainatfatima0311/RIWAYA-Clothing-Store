@@ -97,13 +97,13 @@ export default function Products() {
       </Select>
     ) },
     { key: 'display', label: 'Frontend', render: (r) => (
-      <button onClick={() => handleToggleDisplay(r)} className="inline-flex items-center gap-1.5" title="Show / hide on storefront">
-        {r.displayOnFrontend ? <Eye className="h-4 w-4 text-emerald-600" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+      <button onClick={() => handleToggleDisplay(r)} className="inline-flex items-center gap-1.5 transition-colors" title="Show / hide on storefront">
+        {r.displayOnFrontend ? <Eye className="h-4 w-4 text-emerald-600 transition-colors" /> : <EyeOff className="h-4 w-4 text-muted-foreground transition-colors" />}
       </button>
     ) },
     { key: 'featured', label: 'Featured', render: (r) => (
-      <button onClick={() => handleToggleFeatured(r)} className="inline-flex items-center" title="Toggle 'Featured Pieces' on the home page">
-        <Star className={`h-4 w-4 ${r.isFeatured ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'}`} />
+      <button onClick={() => handleToggleFeatured(r)} className="inline-flex items-center transition-colors" title="Toggle 'Featured Pieces' on the home page">
+        <Star className={`h-4 w-4 transition-colors ${r.isFeatured ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'}`} />
       </button>
     ) },
     { key: 'sold', label: 'Sold', render: (r) => r.totalSold || 0 },
@@ -111,8 +111,8 @@ export default function Products() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -120,8 +120,10 @@ export default function Products() {
 
   return (
     <div>
-      <PageHeader title="Products" description="Customer-facing catalog. Toggle frontend visibility per product."
-        actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New product</Button>} />
+      <div className="animate-fade-up">
+        <PageHeader title="Products" description="Customer-facing catalog. Toggle frontend visibility per product."
+          actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New product</Button>} />
+      </div>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }} placeholder="Search">
         <FilterField label="Category">

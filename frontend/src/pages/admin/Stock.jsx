@@ -75,12 +75,12 @@ export default function Stock() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => setOpModal({ type: 'receive', item: r })} title="Receive" className="p-1.5 hover:bg-accent/30 rounded"><ArrowDownToLine className="h-4 w-4 text-emerald-600" /></button>
-          <button onClick={() => setOpModal({ type: 'transfer', item: r })} title="Transfer" className="p-1.5 hover:bg-accent/30 rounded"><ArrowUpDown className="h-4 w-4 text-blue-600" /></button>
-          <button onClick={() => setOpModal({ type: 'adjust', item: r })} title="Adjust" className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setOpModal({ type: 'writeOff', item: r })} title="Write off" className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><MinusCircle className="h-4 w-4" /></button>
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4 text-muted-foreground" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={() => setOpModal({ type: 'receive', item: r })} title="Receive" className="p-1.5 hover:bg-accent/30 rounded transition-colors"><ArrowDownToLine className="h-4 w-4 text-emerald-600" /></button>
+          <button onClick={() => setOpModal({ type: 'transfer', item: r })} title="Transfer" className="p-1.5 hover:bg-accent/30 rounded transition-colors"><ArrowUpDown className="h-4 w-4 text-blue-600" /></button>
+          <button onClick={() => setOpModal({ type: 'adjust', item: r })} title="Adjust" className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={() => setOpModal({ type: 'writeOff', item: r })} title="Write off" className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><MinusCircle className="h-4 w-4" /></button>
+          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4 text-muted-foreground" /></button>
+          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -91,10 +91,10 @@ export default function Stock() {
       <PageHeader title="Stock Items" description="Inventory master list with per-rack quantities & low-stock alerts"
         actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New stock item</Button>} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Out of stock</div><div className="text-2xl font-semibold text-destructive">{lowCounts.out_of_stock}</div></div><AlertTriangle className="h-8 w-8 text-destructive" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Urgent (≤ reorder)</div><div className="text-2xl font-semibold text-amber-600">{lowCounts.urgent}</div></div><AlertTriangle className="h-8 w-8 text-amber-500" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Low</div><div className="text-2xl font-semibold text-amber-700">{lowCounts.low}</div></div><AlertTriangle className="h-8 w-8 text-amber-600" /></div></CardContent></Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 animate-fade-up">
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Out of stock</div><div className="text-2xl font-semibold text-destructive">{lowCounts.out_of_stock}</div></div><AlertTriangle className="h-8 w-8 text-destructive" /></div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Urgent (≤ reorder)</div><div className="text-2xl font-semibold text-amber-600">{lowCounts.urgent}</div></div><AlertTriangle className="h-8 w-8 text-amber-500" /></div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Low</div><div className="text-2xl font-semibold text-amber-700">{lowCounts.low}</div></div><AlertTriangle className="h-8 w-8 text-amber-600" /></div></CardContent></Card>
       </div>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }}>

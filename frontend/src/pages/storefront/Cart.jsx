@@ -9,6 +9,7 @@ import {
 } from '@/api/cartApi';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
+import { Reveal } from '@/components/ui/Reveal';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
@@ -78,7 +79,7 @@ export default function Cart() {
 
       <div className="grid lg:grid-cols-[1fr_360px] gap-8">
         <div className="space-y-3">
-          {items.map((item) => {
+          {items.map((item, i) => {
             const product = item.product;
             const variant = product?.variants?.length
               ? product.variants.find((v) => String(v._id) === String(item.variantId))
@@ -87,13 +88,17 @@ export default function Cart() {
             const unitPrice = item.priceSnapshot;
 
             return (
-              <Card key={item._id}>
+              <Card
+                key={item._id}
+                style={{ animationDelay: `${Math.min(i * 60, 400)}ms` }}
+                className="animate-fade-up hover-lift"
+              >
                 <CardContent className="p-4 flex gap-4">
-                  <Link to={`/products/${product?.slug}`} className="w-20 h-28 sm:w-24 sm:h-32 bg-muted rounded overflow-hidden flex-shrink-0">
-                    {img && <img src={img} alt={product?.name} className="w-full h-full object-cover" />}
+                  <Link to={`/products/${product?.slug}`} className="group w-20 h-28 sm:w-24 sm:h-32 bg-muted rounded overflow-hidden flex-shrink-0">
+                    {img && <img src={img} alt={product?.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />}
                   </Link>
                   <div className="flex-1 min-w-0">
-                    <Link to={`/products/${product?.slug}`} className="font-medium line-clamp-2 hover:text-primary">
+                    <Link to={`/products/${product?.slug}`} className="font-medium line-clamp-2 hover:text-primary transition-colors">
                       {product?.name}
                     </Link>
                     {variant && (
@@ -124,7 +129,7 @@ export default function Cart() {
           })}
         </div>
 
-        <aside>
+        <Reveal as="aside" animation="fade-up">
           <Card className="sticky top-20">
             <CardContent className="pt-6 space-y-4">
               <h2 className="font-semibold text-lg">Order summary</h2>
@@ -148,12 +153,12 @@ export default function Cart() {
               <Button className="w-full" onClick={() => navigate('/checkout')}>
                 Proceed to checkout <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
-              <Link to="/products" className="block text-center text-sm text-muted-foreground hover:text-primary">
+              <Link to="/products" className="block text-center text-sm text-muted-foreground hover:text-primary transition-colors">
                 Continue shopping
               </Link>
             </CardContent>
           </Card>
-        </aside>
+        </Reveal>
       </div>
     </div>
   );

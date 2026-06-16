@@ -58,10 +58,11 @@ export default function OrderDetail() {
 
   return (
     <div>
-      <Link to="/admin/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+      <Link to="/admin/orders" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 mb-4">
         <ArrowLeft className="h-4 w-4" /> All orders
       </Link>
 
+      <div className="animate-fade-up">
       <PageHeader
         title={o.orderNumber}
         description={`${o.orderType === 'online' ? 'Online' : 'Walk-in'} order · placed ${formatDateTime(o.orderedAt)}`}
@@ -92,6 +93,7 @@ export default function OrderDetail() {
           </div>
         }
       />
+      </div>
 
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
         <div className="space-y-4">
@@ -154,7 +156,7 @@ export default function OrderDetail() {
         </div>
 
         <aside className="space-y-4">
-          <Card>
+          <Card className="hover-lift">
             <CardContent className="pt-6 space-y-2 text-sm">
               <h3 className="font-semibold">Customer</h3>
               <div className="font-medium">{o.customer?.name}</div>
@@ -164,7 +166,7 @@ export default function OrderDetail() {
           </Card>
 
           {o.shippingAddress && (
-            <Card>
+            <Card className="hover-lift">
               <CardContent className="pt-6 space-y-1 text-sm">
                 <h3 className="font-semibold mb-2">Shipping address</h3>
                 <div>{o.shippingAddress.fullName}</div>
@@ -174,7 +176,7 @@ export default function OrderDetail() {
             </Card>
           )}
 
-          <Card>
+          <Card className="hover-lift">
             <CardContent className="pt-6 space-y-2 text-sm">
               <h3 className="font-semibold">Totals</h3>
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(o.subtotal)}</span></div>

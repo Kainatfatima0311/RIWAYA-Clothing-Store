@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { ArrowLeft, CreditCard, Truck, Wallet } from 'lucide-react';
+import { ArrowLeft, CreditCard, Truck, Wallet, Copy } from 'lucide-react';
 import { useGetCartQuery } from '@/api/cartApi';
 import { usePlaceOrderMutation } from '@/api/orderApi';
 import { useMyCustomerProfileQuery } from '@/api/peopleApi';
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button';
 import { Input, Select } from '@/components/ui/Input';
 import { Label, FormError } from '@/components/ui/Label';
 import { Card, CardContent } from '@/components/ui/Card';
+import { Reveal } from '@/components/ui/Reveal';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
@@ -31,6 +32,34 @@ const schema = z.object({
 });
 
 const SHIPPING_FEES = { standard: 250, express: 500 };
+
+// RIWAYA's receiving accounts — shown when a customer picks a transfer method so
+// they know where to send the money. Update these with the store's real accounts.
+const PAYMENT_ACCOUNTS = {
+  bank_transfer: {
+    label: 'Send your bank transfer to:',
+    rows: [
+      { k: 'Bank', v: 'Meezan Bank' },
+      { k: 'Account title', v: 'RIWAYA Clothing' },
+      { k: 'Account number', v: '0123456789012' },
+      { k: 'IBAN', v: 'PK00MEZN0000123456789012' },
+    ],
+  },
+  jazzcash: {
+    label: 'Send your JazzCash payment to:',
+    rows: [
+      { k: 'Account title', v: 'RIWAYA Clothing' },
+      { k: 'JazzCash number', v: '0300 1234567' },
+    ],
+  },
+  easypaisa: {
+    label: 'Send your EasyPaisa payment to:',
+    rows: [
+      { k: 'Account title', v: 'RIWAYA Clothing' },
+      { k: 'EasyPaisa number', v: '0345 1234567' },
+    ],
+  },
+};
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -75,6 +104,14 @@ export default function Checkout() {
   const subtotal = cart.subtotal;
   const shippingFee = subtotal >= 5000 ? 0 : SHIPPING_FEES[watch('shippingMethod') || 'standard'];
   const grandTotal = subtotal + shippingFee;
+  const account = PAYMENT_ACCOUNTS[paymentMethod];
+
+  const copyText = async (text) => {
+    try {
+      await navigator.clipboard?.writeText(text);
+      toast.success('Copied to clipboard');
+    } catch { /* clipboard unavailable */ }
+  };
 
   const onSubmit = async (values) => {
     if (!items.length) {
@@ -128,14 +165,15 @@ export default function Checkout() {
 
   return (
     <div className="container py-8">
-      <Link to="/cart" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-6">
+      <Link to="/cart" className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 mb-6 animate-fade-up">
         <ArrowLeft className="h-4 w-4" /> Back to cart
       </Link>
-      <h1 className="font-serif text-3xl md:text-4xl mb-6">Checkout</h1>
+      <h1 className="font-serif text-3xl md:text-4xl mb-6 animate-fade-up">Checkout</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid lg:grid-cols-[1fr_380px] gap-8">
         <div className="space-y-6">
           {/* Shipping address */}
+          <Reveal animation="fade-up">
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold text-lg mb-4">Shipping address</h2>
@@ -180,8 +218,10 @@ export default function Checkout() {
               </div>
             </CardContent>
           </Card>
+          </Reveal>
 
           {/* Shipping method */}
+          <Reveal animation="fade-up" delay={60}>
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold text-lg mb-4">Shipping method</h2>
@@ -202,8 +242,10 @@ export default function Checkout() {
               </div>
             </CardContent>
           </Card>
+          </Reveal>
 
           {/* Payment method */}
+          <Reveal animation="fade-up" delay={120}>
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold text-lg mb-4">Payment method</h2>
@@ -224,6 +266,35 @@ export default function Checkout() {
                   </label>
                 ))}
               </div>
+
+              {/* RIWAYA receiving account — shown for the selected transfer method */}
+              {account && (
+                <div className="mt-4 rounded-md border border-primary/40 bg-primary/5 p-4 animate-fade-in">
+                  <div className="text-sm font-semibold mb-2">{account.label}</div>
+                  <dl className="space-y-1.5">
+                    {account.rows.map((r) => (
+                      <div key={r.k} className="flex items-center justify-between gap-3 text-sm">
+                        <dt className="text-muted-foreground shrink-0">{r.k}</dt>
+                        <dd className="flex items-center gap-2 font-medium font-mono text-right">
+                          <span className="break-all">{r.v}</span>
+                          <button
+                            type="button"
+                            onClick={() => copyText(r.v)}
+                            className="text-primary hover:text-primary-hover shrink-0"
+                            aria-label={`Copy ${r.k}`}
+                            title="Copy"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </button>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    After sending the payment, enter your Transaction ID below so our team can verify it.
+                  </p>
+                </div>
+              )}
 
               {/* Transaction reference for non-COD methods */}
               {paymentMethod !== 'cod' && (
@@ -256,14 +327,17 @@ export default function Checkout() {
               </div>
             </CardContent>
           </Card>
+          </Reveal>
 
           {/* Notes */}
+          <Reveal animation="fade-up" delay={180}>
           <Card>
             <CardContent className="pt-6">
               <Label htmlFor="customerNotes">Order notes (optional)</Label>
               <textarea id="customerNotes" {...register('customerNotes')} rows={2} className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm" placeholder="e.g. Please call before delivery" />
             </CardContent>
           </Card>
+          </Reveal>
         </div>
 
         {/* Order summary */}

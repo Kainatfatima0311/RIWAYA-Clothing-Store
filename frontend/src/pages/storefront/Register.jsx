@@ -45,7 +45,7 @@ export default function Register() {
 
   return (
     <div className="min-h-[70vh] container flex items-center justify-center py-10">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md animate-fade-up">
         <CardHeader>
           <CardTitle>Create your account</CardTitle>
           <CardDescription>Join RIWAYA and discover premium fashion</CardDescription>
@@ -74,7 +74,7 @@ export default function Register() {
             </div>
             <Button type="submit" loading={isLoading} className="w-full">Create account</Button>
             <p className="text-sm text-center text-muted-foreground">
-              Already a member? <Link to="/login" className="text-primary font-medium">Sign in</Link>
+              Already a member? <Link to="/login" className="text-primary font-medium transition-colors hover:text-primary-hover">Sign in</Link>
             </p>
           </form>
         </CardContent>

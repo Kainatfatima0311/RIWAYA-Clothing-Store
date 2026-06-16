@@ -30,11 +30,16 @@ export default function MyOrders() {
 
   return (
     <div className="container py-8 max-w-4xl">
-      <h1 className="font-serif text-3xl md:text-4xl mb-6">My Orders</h1>
+      <h1 className="font-serif text-3xl md:text-4xl mb-6 animate-fade-up">My Orders</h1>
       <div className="space-y-3">
-        {orders.map((order) => (
-          <Link key={order._id} to={`/track/${order.orderNumber}`}>
-            <Card className="hover:border-primary transition-colors">
+        {orders.map((order, i) => (
+          <Link
+            key={order._id}
+            to={`/track/${order.orderNumber}`}
+            className="block animate-fade-up"
+            style={{ animationDelay: `${Math.min(i * 60, 400)}ms` }}
+          >
+            <Card className="hover-lift hover:border-primary transition-colors">
               <CardContent className="p-4 flex items-center gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1.5 flex-wrap">

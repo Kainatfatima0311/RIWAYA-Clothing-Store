@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import { Reveal } from '@/components/ui/Reveal';
 import { BRAND_NAME } from '@/lib/constants';
 // Imported so Vite content-hashes them → deployment-safe on Vercel.
 import contact1 from '@/assets/contact/contact1.jpeg';
@@ -60,30 +61,32 @@ export default function Contact() {
         <div className="grid md:grid-cols-5 gap-10">
           {/* Contact details */}
           <div className="md:col-span-2 space-y-6">
-            {DETAILS.map((d) => (
-              <div key={d.label} className="flex items-start gap-3">
+            {DETAILS.map((d, i) => (
+              <Reveal key={d.label} delay={i * 60} className="flex items-start gap-3">
                 <div className="rounded-full bg-primary/10 p-2.5 text-primary flex-shrink-0">
                   <d.icon className="h-5 w-5" />
                 </div>
                 <div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">{d.label}</div>
                   {d.href ? (
-                    <a href={d.href} className="text-sm font-medium hover:text-primary break-all">{d.value}</a>
+                    <a href={d.href} className="text-sm font-medium hover:text-primary transition-colors break-all">{d.value}</a>
                   ) : (
                     <div className="text-sm font-medium">{d.value}</div>
                   )}
                 </div>
-              </div>
+              </Reveal>
             ))}
-            <img
-              src={contact2}
-              alt="Inside the RIWAYA boutique"
-              className="w-full rounded-xl object-cover aspect-[3/2] shadow-sm border"
-            />
+            <Reveal delay={DETAILS.length * 60} className="group overflow-hidden rounded-xl shadow-sm border hover-lift">
+              <img
+                src={contact2}
+                alt="Inside the RIWAYA boutique"
+                className="w-full object-cover aspect-[3/2] transition-transform duration-500 group-hover:scale-105"
+              />
+            </Reveal>
           </div>
 
           {/* Message form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="md:col-span-3 space-y-4 rounded-xl border p-6 bg-card">
+          <Reveal as="form" animation="fade-up" delay={120} onSubmit={handleSubmit(onSubmit)} className="md:col-span-3 space-y-4 rounded-xl border p-6 bg-card">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <Label required>Name</Label>
@@ -106,7 +109,7 @@ export default function Contact() {
               {errors.message && <p className="text-xs text-destructive mt-1">{errors.message.message}</p>}
             </div>
             <Button type="submit" className="w-full sm:w-auto"><Send className="h-4 w-4 mr-2" /> Send message</Button>
-          </form>
+          </Reveal>
         </div>
       </div>
 
@@ -114,12 +117,12 @@ export default function Contact() {
       <section className="relative isolate overflow-hidden bg-neutral-900">
         <img src={contact3} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/55 to-black/45" />
-        <div className="container py-20 text-center max-w-2xl text-white">
+        <Reveal animation="fade-up" className="container py-20 text-center max-w-2xl text-white">
           <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-3">Come say hello</p>
           <h2 className="font-serif text-3xl md:text-4xl drop-shadow">Visit our boutique</h2>
           <p className="text-white/85 mt-3">{CONTACT.address}</p>
           <p className="text-white/70 text-sm mt-1">{CONTACT.hours}</p>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

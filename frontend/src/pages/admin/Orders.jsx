@@ -32,7 +32,7 @@ export default function Orders() {
     {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
-        <button aria-label="View order" onClick={(e) => { e.stopPropagation(); navigate(`/admin/orders/${r._id}`); }} className="p-1.5 hover:bg-accent/30 rounded">
+        <button aria-label="View order" onClick={(e) => { e.stopPropagation(); navigate(`/admin/orders/${r._id}`); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors">
           <Eye className="h-4 w-4" />
         </button>
       ),
@@ -43,11 +43,11 @@ export default function Orders() {
     <div>
       <PageHeader title="Orders" description="All customer orders (online + walk-in)" />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total orders</div><div className="text-2xl font-semibold">{summary.totalOrders}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Revenue</div><div className="text-2xl font-semibold text-primary">{formatPrice(summary.totalRevenue)}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Collected</div><div className="text-2xl font-semibold text-emerald-600">{formatPrice(summary.totalPaid)}</div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Refunded</div><div className="text-2xl font-semibold text-destructive">{formatPrice(summary.totalRefunded)}</div></CardContent></Card>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 animate-fade-up">
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total orders</div><div className="text-2xl font-semibold">{summary.totalOrders}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Revenue</div><div className="text-2xl font-semibold text-primary">{formatPrice(summary.totalRevenue)}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Collected</div><div className="text-2xl font-semibold text-emerald-600">{formatPrice(summary.totalPaid)}</div></CardContent></Card>
+        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Refunded</div><div className="text-2xl font-semibold text-destructive">{formatPrice(summary.totalRefunded)}</div></CardContent></Card>
       </div>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }} placeholder="Search order number">

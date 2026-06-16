@@ -92,10 +92,12 @@ const TIPS = [
 export default function Guide() {
   return (
     <div className="max-w-4xl">
-      <PageHeader
-        title="Getting Started"
-        description="A quick guide to setting up and running your store. Follow the steps top to bottom."
-      />
+      <div className="animate-fade-up">
+        <PageHeader
+          title="Getting Started"
+          description="A quick guide to setting up and running your store. Follow the steps top to bottom."
+        />
+      </div>
 
       {/* Intro */}
       <Card className="mb-6 border-primary/30 bg-primary/5">
@@ -117,7 +119,7 @@ export default function Guide() {
       {/* Steps */}
       <div className="space-y-3">
         {STEPS.map((s, i) => (
-          <Card key={s.to} className="hover:shadow-md transition-shadow">
+          <Card key={s.to} className="hover-lift">
             <CardContent className="p-4 flex items-start gap-4">
               <div className="flex flex-col items-center flex-shrink-0">
                 <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
@@ -133,7 +135,7 @@ export default function Guide() {
               </div>
               <Link
                 to={s.to}
-                className="flex-shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline whitespace-nowrap mt-1"
+                className="flex-shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover hover:underline transition-colors whitespace-nowrap mt-1"
               >
                 Open <ArrowRight className="h-4 w-4" />
               </Link>

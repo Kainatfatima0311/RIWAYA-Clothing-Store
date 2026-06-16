@@ -1,6 +1,7 @@
 import { Check, Package, Truck, ShoppingBag, XCircle, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDateTime } from '@/lib/format';
+import { Reveal } from '@/components/ui/Reveal';
 
 const FLOW = [
   { key: 'pending', label: 'Order placed', icon: ShoppingBag },
@@ -33,7 +34,7 @@ export function StatusTimeline({ order }) {
       <div className="border rounded-lg p-6 bg-card">
         <div className="flex items-center gap-3">
           <div className={cn(
-            'h-12 w-12 rounded-full flex items-center justify-center',
+            'h-12 w-12 rounded-full flex items-center justify-center animate-scale-in',
             T.tone === 'destructive' ? 'bg-destructive/10 text-destructive' : 'bg-amber-100 text-amber-900'
           )}>
             <T.icon className="h-6 w-6" />
@@ -63,11 +64,16 @@ export function StatusTimeline({ order }) {
           const isCurrent = idx === currentIdx;
           const stamp = stampFor(step.key);
           return (
-            <li key={step.key} className="flex gap-4">
+            <Reveal
+              as="li"
+              key={step.key}
+              delay={Math.min(idx * 60, 400)}
+              className="flex gap-4"
+            >
               <div className="relative flex flex-col items-center">
                 <div
                   className={cn(
-                    'h-9 w-9 rounded-full flex items-center justify-center border-2 transition-colors',
+                    'h-9 w-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
                     isCompleted
                       ? 'bg-primary border-primary text-primary-foreground'
                       : 'bg-background border-border text-muted-foreground'
@@ -87,7 +93,7 @@ export function StatusTimeline({ order }) {
                   <div className="text-xs text-muted-foreground">Pending</div>
                 )}
               </div>
-            </li>
+            </Reveal>
           );
         })}
       </ol>

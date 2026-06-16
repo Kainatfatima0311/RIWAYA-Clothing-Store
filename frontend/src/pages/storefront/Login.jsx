@@ -64,7 +64,7 @@ export default function Login() {
 
   return (
     <div className="min-h-[70vh] container flex items-center justify-center py-10">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md animate-scale-in">
         <CardHeader>
           <CardTitle>Welcome back</CardTitle>
           <CardDescription>Sign in to your RIWAYA account</CardDescription>
@@ -83,7 +83,7 @@ export default function Login() {
             </div>
             <Button type="submit" loading={isLoading} className="w-full">Sign in</Button>
             <p className="text-sm text-center text-muted-foreground">
-              No account? <Link to="/register" className="text-primary font-medium">Create one</Link>
+              No account? <Link to="/register" className="text-primary font-medium transition-colors hover:text-primary-hover">Create one</Link>
             </p>
           </form>
         </CardContent>

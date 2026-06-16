@@ -70,8 +70,8 @@ export default function Employees() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -79,8 +79,10 @@ export default function Employees() {
 
   return (
     <div>
-      <PageHeader title="Employees" description="HR records, departments, salaries"
-        actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> Add employee</Button>} />
+      <div className="animate-fade-up">
+        <PageHeader title="Employees" description="HR records, departments, salaries"
+          actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> Add employee</Button>} />
+      </div>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }} placeholder="Search by name, phone, code">
         <FilterField label="Department">
@@ -106,7 +108,7 @@ export default function Employees() {
   );
 }
 
-function EmployeeFormModal({ open, onClose, initial, onSubmit, loading }) {
+export function EmployeeFormModal({ open, onClose, initial, onSubmit, loading }) {
   const { register, handleSubmit } = useForm({
     values: initial ? {
       name: initial.name, phone: initial.phone, email: initial.email || '',

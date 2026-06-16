@@ -53,8 +53,8 @@ export default function Suppliers() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button aria-label="Edit supplier" onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button aria-label="Delete supplier" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button aria-label="Edit supplier" onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button aria-label="Delete supplier" onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -62,8 +62,10 @@ export default function Suppliers() {
 
   return (
     <div>
-      <PageHeader title="Suppliers" description="Mills, distributors & individual suppliers"
-        actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New supplier</Button>} />
+      <div className="animate-fade-up">
+        <PageHeader title="Suppliers" description="Mills, distributors & individual suppliers"
+          actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New supplier</Button>} />
+      </div>
       <FilterBar search={search} onSearch={(v) => { setSearch(v); setPage(1); }} placeholder="Search by name, code or phone" />
       <DataTable columns={columns} data={data?.data || []} loading={isLoading} pagination={data?.pagination} onPageChange={setPage} />
 

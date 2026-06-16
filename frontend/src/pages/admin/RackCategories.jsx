@@ -65,8 +65,8 @@ export default function RackCategories() {
       key: 'actions', label: '', className: 'text-right',
       render: (r) => (
         <div className="flex items-center justify-end gap-1">
-          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded"><Pencil className="h-4 w-4" /></button>
-          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded"><Trash2 className="h-4 w-4" /></button>
+          <button onClick={() => { setEditing(r); setModalOpen(true); }} className="p-1.5 hover:bg-accent/30 rounded transition-colors"><Pencil className="h-4 w-4" /></button>
+          <button onClick={() => setConfirmId(r._id)} className="p-1.5 hover:bg-destructive/10 text-destructive rounded transition-colors"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -74,12 +74,14 @@ export default function RackCategories() {
 
   return (
     <div>
-      <PageHeader
-        title="Rack Categories"
-        description="Labels used to organize racks and stock items (e.g. Bridal, Formal, Embroidery)."
-        actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New rack category</Button>}
-      />
-      <FilterBar search={search} onSearch={setSearch} placeholder="Search rack categories" />
+      <div className="animate-fade-up">
+        <PageHeader
+          title="Rack Categories"
+          description="Labels used to organize racks and stock items (e.g. Bridal, Formal, Embroidery)."
+          actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New rack category</Button>}
+        />
+        <FilterBar search={search} onSearch={setSearch} placeholder="Search rack categories" />
+      </div>
       <DataTable columns={columns} data={all} loading={isLoading} />
 
       <RackCategoryFormModal

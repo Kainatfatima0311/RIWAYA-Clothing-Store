@@ -6,6 +6,7 @@ import { ProductCard, ProductCardSkeleton } from '@/components/storefront/Produc
 import { Input, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Reveal } from '@/components/ui/Reveal';
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +57,7 @@ export default function Products() {
   return (
     <div className="container py-8">
       <div className="flex items-end justify-between mb-6">
-        <div>
+        <div className="animate-fade-up">
           <h1 className="font-serif text-3xl md:text-4xl">Shop</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {pagination ? `${pagination.total} product${pagination.total !== 1 ? 's' : ''}` : 'Browse our collection'}
@@ -124,7 +125,15 @@ export default function Products() {
           ) : (
             <>
               <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isFetching ? 'opacity-50' : ''}`}>
-                {products.map((p) => <ProductCard key={p._id} product={p} />)}
+                {products.map((p, i) => (
+                  <div
+                    key={p._id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${Math.min(i * 50, 400)}ms` }}
+                  >
+                    <ProductCard product={p} />
+                  </div>
+                ))}
               </div>
               {pagination && pagination.totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-10">
