@@ -17,7 +17,9 @@ import {
   Menu,
   X,
   Tag,
+  Tags,
   ListOrdered,
+  BookOpen,
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -30,7 +32,10 @@ import { cn } from '@/lib/utils';
 const SECTIONS = [
   {
     label: 'Overview',
-    items: [{ to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true }],
+    items: [
+      { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
+      { to: '/admin/guide', icon: BookOpen, label: 'Getting Started' },
+    ],
   },
   {
     label: 'Catalog',
@@ -45,6 +50,7 @@ const SECTIONS = [
       { to: '/admin/stock', icon: Boxes, label: 'Stock Items' },
       { to: '/admin/stock-movements', icon: ListOrdered, label: 'Movements' },
       { to: '/admin/warehouses', icon: Warehouse, label: 'Warehouses' },
+      { to: '/admin/rack-categories', icon: Tags, label: 'Rack Categories' },
       { to: '/admin/equipment', icon: Wrench, label: 'Equipment' },
     ],
   },

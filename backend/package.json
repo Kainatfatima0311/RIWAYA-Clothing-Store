@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed:admin": "node scripts/seedSuperAdmin.js",
-    "seed:demo": "node scripts/seedDemoData.js"
+    "seed:demo": "node scripts/seedDemoData.js",
+    "clean:data": "node scripts/cleanData.js"
   },
   "keywords": ["mern", "ecommerce", "erp", "riwaya"],
   "author": "RIWAYA",

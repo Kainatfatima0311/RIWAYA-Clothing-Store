@@ -36,6 +36,8 @@ import AdminFinance from '@/pages/admin/Finance';
 import AdminReports from '@/pages/admin/Reports';
 import AdminOrderDetail from '@/pages/admin/OrderDetail';
 import AdminPODetail from '@/pages/admin/PODetail';
+import AdminGuide from '@/pages/admin/Guide';
+import AdminRackCategories from '@/pages/admin/RackCategories';
 
 export function AppRouter() {
   return (
@@ -60,11 +62,13 @@ export function AppRouter() {
       {/* Admin */}
       <Route path="/admin" element={<StaffRoute><AdminLayout /></StaffRoute>}>
         <Route index element={<Dashboard />} />
+        <Route path="guide" element={<AdminGuide />} />
         <Route path="warehouses" element={<AdminWarehouses />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="product-categories" element={<AdminCategories />} />
         <Route path="stock" element={<AdminStock />} />
         <Route path="stock-movements" element={<AdminStockMovements />} />
+        <Route path="rack-categories" element={<AdminRackCategories />} />
         <Route path="equipment" element={<AdminEquipment />} />
         <Route path="suppliers" element={<AdminSuppliers />} />
         <Route path="purchase-orders" element={<AdminPurchaseOrders />} />

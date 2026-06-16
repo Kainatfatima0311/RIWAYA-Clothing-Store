@@ -3,6 +3,10 @@ import { API_URL } from '@/lib/constants';
 
 export const baseApi = createApi({
   reducerPath: 'api',
+  // Re-fetch list/detail data whenever a screen re-mounts, so dropdowns and
+  // tables always reflect the latest server state (new categories, suppliers,
+  // warehouses, etc.) even if a tag invalidation was missed.
+  refetchOnMountOrArgChange: true,
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     credentials: 'include', // send cookies for JWT
