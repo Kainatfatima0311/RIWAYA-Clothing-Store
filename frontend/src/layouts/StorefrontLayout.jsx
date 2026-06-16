@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, Heart, User, LogOut, Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -23,6 +23,7 @@ export default function StorefrontLayout() {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [logout] = useLogoutMutation();
 
   const { data: cart } = useGetCartQuery(undefined, { skip: !isAuth });
@@ -141,9 +142,11 @@ export default function StorefrontLayout() {
         </div>
       </header>
 
-      {/* Main content */}
+      {/* Main content — fades between pages for a smooth, animated flow */}
       <main className="flex-1">
-        <Outlet />
+        <div key={location.pathname} className="animate-fade-in">
+          <Outlet />
+        </div>
       </main>
 
       {/* Footer */}

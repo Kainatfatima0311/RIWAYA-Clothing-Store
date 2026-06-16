@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Warehouse,
@@ -89,6 +89,7 @@ export default function AdminLayout() {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
@@ -175,7 +176,9 @@ export default function AdminLayout() {
         </header>
 
         <main className="flex-1 p-4 lg:p-6 max-w-full">
-          <Outlet />
+          <div key={location.pathname} className="animate-fade-in">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
