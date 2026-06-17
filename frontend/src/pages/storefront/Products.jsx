@@ -7,6 +7,7 @@ import { Input, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Reveal } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,7 +61,11 @@ export default function Products() {
         <div className="animate-fade-up">
           <h1 className="font-serif text-3xl md:text-4xl">Shop</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {pagination ? `${pagination.total} product${pagination.total !== 1 ? 's' : ''}` : 'Browse our collection'}
+            {pagination ? (
+              <>
+                <CountUp value={pagination.total} /> product{pagination.total !== 1 ? 's' : ''}
+              </>
+            ) : 'Browse our collection'}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)} className="lg:hidden">
@@ -70,7 +75,7 @@ export default function Products() {
 
       <div className="grid lg:grid-cols-[260px_1fr] gap-8">
         <aside className={`${showFilters ? 'block' : 'hidden'} lg:block`}>
-          <div className="sticky top-20 space-y-5">
+          <Reveal animation="fade-in" className="sticky top-20 space-y-5">
             <div>
               <label className="text-sm font-medium block mb-2">Search</label>
               <div className="relative">
@@ -112,7 +117,7 @@ export default function Products() {
             <Button variant="outline" size="sm" className="w-full" onClick={clearFilters}>
               <X className="h-4 w-4 mr-2" /> Clear filters
             </Button>
-          </div>
+          </Reveal>
         </aside>
 
         <div>
@@ -124,15 +129,15 @@ export default function Products() {
             <EmptyState title="No products found" description="Try adjusting your filters or browse all categories." />
           ) : (
             <>
-              <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 ${isFetching ? 'opacity-50' : ''}`}>
+              <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 transition-opacity duration-300 ${isFetching ? 'opacity-50' : ''}`}>
                 {products.map((p, i) => (
-                  <div
+                  <Reveal
                     key={p._id}
-                    className="animate-fade-up"
-                    style={{ animationDelay: `${Math.min(i * 50, 400)}ms` }}
+                    animation="fade-up-sm"
+                    delay={Math.min(i * 50, 400)}
                   >
                     <ProductCard product={p} />
-                  </div>
+                  </Reveal>
                 ))}
               </div>
               {pagination && pagination.totalPages > 1 && (

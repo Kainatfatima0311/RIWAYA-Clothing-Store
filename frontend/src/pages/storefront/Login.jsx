@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +29,7 @@ export default function Login() {
   const isAuth = useAppSelector(selectIsAuthenticated);
   const isStaff = useAppSelector(selectIsStaff);
   const [login, { isLoading }] = useLoginMutation();
+  const [shake, setShake] = useState(0); // bump to retrigger the error-nudge animation
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
   // If already logged in, send to the right place based on role
@@ -59,13 +61,15 @@ export default function Login() {
     } catch (err) {
       console.error('[Login] Error:', err);
       toast.error(apiErrorMessage(err, 'Login failed'));
+      setShake((n) => n + 1); // nudge the card to signal the failed attempt
     }
   };
 
   return (
     <div className="min-h-[70vh] container flex items-center justify-center py-10">
-      <Card className="w-full max-w-md animate-scale-in">
+      <Card key={shake} className={`w-full max-w-md ${shake ? 'animate-shake' : 'animate-scale-in'}`}>
         <CardHeader>
+          <div className="font-serif text-2xl text-primary text-center animate-fade-down">RIWAYA</div>
           <CardTitle>Welcome back</CardTitle>
           <CardDescription>Sign in to your RIWAYA account</CardDescription>
         </CardHeader>

@@ -10,6 +10,8 @@ import {
   useSetEmployeeStatusMutation,
 } from '@/api/peopleApi';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Reveal, Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Input';
@@ -36,13 +38,15 @@ import {
   Wallet as PayrollIcon,
 } from 'lucide-react';
 
-const Tile = ({ icon: Icon, label, value, sub, tone = 'default' }) => (
-  <Card className="hover-lift">
+const Tile = ({ icon: Icon, label, value, sub, tone = 'default', format }) => (
+  <Card className="hover-lift-sm h-full">
     <CardContent className="pt-6">
       <div className="flex items-start justify-between">
         <div>
           <div className="text-xs text-muted-foreground">{label}</div>
-          <div className="text-2xl font-semibold mt-1">{value}</div>
+          <div className="text-2xl font-semibold mt-1">
+            {typeof value === 'number' ? <CountUp value={value} format={format} /> : value}
+          </div>
           {sub && <div className="text-xs text-muted-foreground mt-1">{sub}</div>}
         </div>
         <Icon className={`h-8 w-8 ${tone === 'warn' ? 'text-amber-500' : tone === 'danger' ? 'text-destructive' : 'text-primary'}`} />
@@ -83,51 +87,59 @@ export default function Dashboard() {
         <>
           {/* Today */}
           <section>
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Today</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Reveal animation="fade-up">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Today</h2>
+            </Reveal>
+            <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" animation="fade-up-sm">
               <Tile icon={ShoppingBag} label="Orders" value={d.today.orders} />
-              <Tile icon={Wallet} label="Revenue booked" value={formatPrice(d.today.revenue)} />
-              <Tile icon={Wallet} label="Payments received" value={formatPrice(d.today.paymentsReceived)} sub={`${d.today.paymentCount} payments`} />
+              <Tile icon={Wallet} label="Revenue booked" value={d.today.revenue} format={formatPrice} />
+              <Tile icon={Wallet} label="Payments received" value={d.today.paymentsReceived} format={formatPrice} sub={`${d.today.paymentCount} payments`} />
               <Tile icon={ShoppingBag} label="Pending orders" value={d.operations.pendingOrders} tone="warn" />
-            </div>
+            </Stagger>
           </section>
 
           {/* Month */}
           <section>
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">This Month</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Reveal animation="fade-up">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">This Month</h2>
+            </Reveal>
+            <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" animation="fade-up-sm">
               <Tile icon={ShoppingBag} label="Orders" value={d.month.orders} />
-              <Tile icon={Wallet} label="Revenue" value={formatPrice(d.month.revenue)} />
-              <Tile icon={Wallet} label="Collected" value={formatPrice(d.month.paymentsReceived)} sub={`${d.month.paymentCount} payments`} />
+              <Tile icon={Wallet} label="Revenue" value={d.month.revenue} format={formatPrice} />
+              <Tile icon={Wallet} label="Collected" value={d.month.paymentsReceived} format={formatPrice} sub={`${d.month.paymentCount} payments`} />
               <Tile icon={Users} label="New customers" value={d.month.newCustomers} />
-            </div>
+            </Stagger>
           </section>
 
           {/* Inventory + Operations */}
           <section className="grid lg:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader><CardTitle className="text-base">Inventory health</CardTitle></CardHeader>
-              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Tile icon={AlertTriangle} label="Out of stock" value={d.inventory.outOfStock} tone="danger" />
-                <Tile icon={Boxes} label="Low stock" value={d.inventory.lowStock} tone="warn" />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-base">Operations</CardTitle></CardHeader>
-              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Tile icon={Truck} label="Shipped orders" value={d.operations.shippedOrders} />
-                <Tile icon={Truck} label="Open POs" value={d.operations.openPurchaseOrders} />
-              </CardContent>
-            </Card>
+            <Reveal animation="fade-up" className="h-full">
+              <Card className="h-full">
+                <CardHeader><CardTitle className="text-base">Inventory health</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Tile icon={AlertTriangle} label="Out of stock" value={d.inventory.outOfStock} tone="danger" />
+                  <Tile icon={Boxes} label="Low stock" value={d.inventory.lowStock} tone="warn" />
+                </CardContent>
+              </Card>
+            </Reveal>
+            <Reveal animation="fade-up" delay={80} className="h-full">
+              <Card className="h-full">
+                <CardHeader><CardTitle className="text-base">Operations</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Tile icon={Truck} label="Shipped orders" value={d.operations.shippedOrders} />
+                  <Tile icon={Truck} label="Open POs" value={d.operations.openPurchaseOrders} />
+                </CardContent>
+              </Card>
+            </Reveal>
           </section>
 
           {/* Catalog + People */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" as="section" animation="fade-up-sm">
             <Tile icon={Package} label="Published products" value={d.catalog.publishedProducts} />
             <Tile icon={WarehouseIcon} label="Warehouses" value={d.catalog.warehouses} />
             <Tile icon={Users} label="Total customers" value={d.people.totalCustomers} />
             <Tile icon={Users} label="Active employees" value={d.people.activeEmployees} />
-          </section>
+          </Stagger>
         </>
       )}
 

@@ -230,7 +230,7 @@ export default function Checkout() {
                   { val: 'standard', label: 'Standard (3-5 days)', fee: SHIPPING_FEES.standard },
                   { val: 'express', label: 'Express (1-2 days)', fee: SHIPPING_FEES.express },
                 ].map((opt) => (
-                  <label key={opt.val} className={cn('flex items-center justify-between border rounded-md p-3 cursor-pointer hover:border-primary', watch('shippingMethod') === opt.val && 'border-primary bg-primary/5')}>
+                  <label key={opt.val} className={cn('flex items-center justify-between border rounded-md p-3 cursor-pointer hover:border-primary transition-colors press', watch('shippingMethod') === opt.val && 'border-primary bg-primary/5')}>
                     <div className="flex items-center gap-3">
                       <input type="radio" value={opt.val} {...register('shippingMethod')} />
                       <Truck className="h-4 w-4 text-muted-foreground" />
@@ -256,7 +256,7 @@ export default function Checkout() {
                   { val: 'jazzcash', label: 'JazzCash', icon: Wallet, note: 'Send to our JazzCash and share TX ID.' },
                   { val: 'easypaisa', label: 'EasyPaisa', icon: Wallet, note: 'Send to our EasyPaisa and share TX ID.' },
                 ].map((opt) => (
-                  <label key={opt.val} className={cn('flex items-start gap-3 border rounded-md p-3 cursor-pointer hover:border-primary', paymentMethod === opt.val && 'border-primary bg-primary/5')}>
+                  <label key={opt.val} className={cn('flex items-start gap-3 border rounded-md p-3 cursor-pointer hover:border-primary transition-colors press', paymentMethod === opt.val && 'border-primary bg-primary/5')}>
                     <input type="radio" name="paymentMethod" value={opt.val} checked={paymentMethod === opt.val} onChange={(e) => setPaymentMethod(e.target.value)} className="mt-1" />
                     <opt.icon className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">
@@ -269,7 +269,7 @@ export default function Checkout() {
 
               {/* RIWAYA receiving account — shown for the selected transfer method */}
               {account && (
-                <div className="mt-4 rounded-md border border-primary/40 bg-primary/5 p-4 animate-fade-in">
+                <div key={paymentMethod} className="mt-4 rounded-md border border-primary/40 bg-primary/5 p-4 animate-fade-down">
                   <div className="text-sm font-semibold mb-2">{account.label}</div>
                   <dl className="space-y-1.5">
                     {account.rows.map((r) => (
@@ -280,7 +280,7 @@ export default function Checkout() {
                           <button
                             type="button"
                             onClick={() => copyText(r.v)}
-                            className="text-primary hover:text-primary-hover shrink-0"
+                            className="text-primary hover:text-primary-hover shrink-0 transition-transform active:scale-[0.85]"
                             aria-label={`Copy ${r.k}`}
                             title="Copy"
                           >

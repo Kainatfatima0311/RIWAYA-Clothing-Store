@@ -83,6 +83,36 @@
   .hover-lift {
     @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl;
   }
+  /* Subtler lift for dense admin surfaces (cards, list rows, KPI tiles) */
+  .hover-lift-sm {
+    @apply transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  /* Tappable affordance for non-button clickables (cards, tiles, list items) */
+  .press {
+    @apply transition-transform duration-150 active:scale-[0.98];
+  }
+
+  /* Interactive card: lift + gold border on hover, gentle press */
+  .card-interactive {
+    @apply cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-primary/40 active:scale-[0.99];
+  }
+
+  /* Animated left-origin underline (matches the storefront navbar) — reusable on any link */
+  .link-underline {
+    @apply relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100;
+  }
+
+  /* Luxury gold gradient text — pairs with font-serif headings */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-primary via-primary-hover to-primary bg-clip-text text-transparent;
+    background-size: 200% auto;
+  }
+
+  /* Frosted surface for sticky bars / overlays */
+  .glass {
+    @apply bg-background/80 backdrop-blur-md;
+  }
 
   /* Shimmer placeholder for skeleton loading states */
   .skeleton {
@@ -92,5 +122,14 @@
     content: '';
     @apply absolute inset-0 -translate-x-full animate-shimmer;
     background-image: linear-gradient(90deg, transparent, hsl(var(--background) / 0.45), transparent);
+  }
+
+  /* Thin indeterminate progress bar (route/data loading) */
+  .progress-bar {
+    @apply relative h-0.5 w-full overflow-hidden bg-primary/15;
+  }
+  .progress-bar::after {
+    content: '';
+    @apply absolute inset-y-0 left-0 w-full bg-primary animate-progress;
   }
 }

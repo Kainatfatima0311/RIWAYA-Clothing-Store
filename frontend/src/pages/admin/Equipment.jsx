@@ -22,7 +22,8 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Reveal } from '@/components/ui/Reveal';
+import { Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { formatPrice, formatDate } from '@/lib/format';
 import { apiErrorMessage } from '@/lib/apiError';
 
@@ -80,11 +81,11 @@ export default function Equipment() {
       <PageHeader title="Equipment & Assets" description="Printers, laptops, fans, water coolers — admin's purchase records"
         actions={<><Button variant="outline" onClick={() => setCatModalOpen(true)}>Categories</Button><Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New asset</Button></>} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Reveal animation="fade-up"><Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total records</div><div className="text-2xl font-semibold">{spend?.data?.totalRecords || 0}</div></CardContent></Card></Reveal>
-        <Reveal animation="fade-up" delay={80}><Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total items</div><div className="text-2xl font-semibold">{spend?.data?.totalItems || 0}</div></CardContent></Card></Reveal>
-        <Reveal animation="fade-up" delay={160}><Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total spend</div><div className="text-2xl font-semibold text-primary">{formatPrice(spend?.data?.totalSpent)}</div></CardContent></Card></Reveal>
-      </div>
+      <Stagger step={80} maxDelay={400} animation="fade-up-sm" className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total records</div><div className="text-2xl font-semibold"><CountUp value={spend?.data?.totalRecords || 0} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total items</div><div className="text-2xl font-semibold"><CountUp value={spend?.data?.totalItems || 0} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total spend</div><div className="text-2xl font-semibold text-primary"><CountUp value={spend?.data?.totalSpent || 0} format={formatPrice} /></div></CardContent></Card>
+      </Stagger>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }}>
         <FilterField label="Category">

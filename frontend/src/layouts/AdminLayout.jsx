@@ -127,14 +127,14 @@ export default function AdminLayout() {
                       onClick={() => setOpen(false)}
                       className={({ isActive }) =>
                         cn(
-                          'flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors',
+                          'group flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-all duration-200',
                           isActive
-                            ? 'bg-primary text-primary-foreground'
-                            : 'hover:bg-accent/30 text-foreground/80'
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-foreground/80 hover:bg-accent/30 hover:translate-x-0.5'
                         )
                       }
                     >
-                      <it.icon className="h-4 w-4" />
+                      <it.icon className="h-4 w-4 shrink-0 transition-transform group-hover:scale-110" />
                       {it.label}
                     </NavLink>
                   </li>
@@ -176,7 +176,7 @@ export default function AdminLayout() {
         </header>
 
         <main className="flex-1 p-4 lg:p-6 max-w-full">
-          <div key={location.pathname} className="animate-fade-in">
+          <div key={location.pathname} className="animate-fade-up-sm">
             <Outlet />
           </div>
         </main>

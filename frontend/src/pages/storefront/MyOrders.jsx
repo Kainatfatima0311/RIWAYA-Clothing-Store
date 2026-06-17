@@ -36,7 +36,7 @@ export default function MyOrders() {
           <Link
             key={order._id}
             to={`/track/${order.orderNumber}`}
-            className="block animate-fade-up"
+            className="group block animate-fade-up press"
             style={{ animationDelay: `${Math.min(i * 60, 400)}ms` }}
           >
             <Card className="hover-lift hover:border-primary transition-colors">
@@ -59,7 +59,7 @@ export default function MyOrders() {
                   <div className="font-semibold">{formatPrice(order.grandTotal)}</div>
                   <div className="text-xs text-muted-foreground capitalize">{order.orderType}</div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
               </CardContent>
             </Card>
           </Link>

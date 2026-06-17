@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/Badge';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ProductImage } from '@/components/storefront/ProductImage';
+import { Reveal } from '@/components/ui/Reveal';
 import { formatPrice } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { apiErrorMessage } from '@/lib/apiError';

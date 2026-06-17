@@ -25,6 +25,8 @@ import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent } from '@/components/ui/Card';
+import { Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { formatPrice } from '@/lib/format';
 import { apiErrorMessage } from '@/lib/apiError';
 
@@ -91,11 +93,11 @@ export default function Stock() {
       <PageHeader title="Stock Items" description="Inventory master list with per-rack quantities & low-stock alerts"
         actions={<Button onClick={() => { setEditing(null); setModalOpen(true); }}><Plus className="h-4 w-4 mr-1" /> New stock item</Button>} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 animate-fade-up">
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Out of stock</div><div className="text-2xl font-semibold text-destructive">{lowCounts.out_of_stock}</div></div><AlertTriangle className="h-8 w-8 text-destructive" /></div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Urgent (≤ reorder)</div><div className="text-2xl font-semibold text-amber-600">{lowCounts.urgent}</div></div><AlertTriangle className="h-8 w-8 text-amber-500" /></div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Low</div><div className="text-2xl font-semibold text-amber-700">{lowCounts.low}</div></div><AlertTriangle className="h-8 w-8 text-amber-600" /></div></CardContent></Card>
-      </div>
+      <Stagger step={80} maxDelay={400} animation="fade-up-sm" className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Out of stock</div><div className="text-2xl font-semibold text-destructive"><CountUp value={lowCounts.out_of_stock} /></div></div><AlertTriangle className="h-8 w-8 text-destructive" /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Urgent (≤ reorder)</div><div className="text-2xl font-semibold text-amber-600"><CountUp value={lowCounts.urgent} /></div></div><AlertTriangle className="h-8 w-8 text-amber-500" /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="flex items-center justify-between"><div><div className="text-xs text-muted-foreground">Low</div><div className="text-2xl font-semibold text-amber-700"><CountUp value={lowCounts.low} /></div></div><AlertTriangle className="h-8 w-8 text-amber-600" /></div></CardContent></Card>
+      </Stagger>
 
       <FilterBar search={filters.search} onSearch={(v) => { setFilters({ ...filters, search: v }); setPage(1); }}>
         <FilterField label="Stock status">

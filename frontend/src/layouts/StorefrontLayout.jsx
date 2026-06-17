@@ -68,21 +68,21 @@ export default function StorefrontLayout() {
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <Link to="/products" className="p-2 rounded-md transition-colors hover:bg-accent/30" aria-label="Search">
-              <Search className="h-5 w-5" />
+            <Link to="/products" className="group p-2 rounded-md transition-colors hover:bg-accent/30" aria-label="Search">
+              <Search className="h-5 w-5 transition-transform group-hover:scale-110" />
             </Link>
-            <Link to="/wishlist" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Wishlist">
-              <Heart className="h-5 w-5" />
+            <Link to="/wishlist" className="group p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Wishlist">
+              <Heart className="h-5 w-5 transition-transform group-hover:scale-110" />
               {wlCount > 0 && (
-                <span key={wlCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-scale-in">
+                <span key={wlCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-pop">
                   {wlCount}
                 </span>
               )}
             </Link>
-            <Link to="/cart" className="p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Cart">
-              <ShoppingCart className="h-5 w-5" />
+            <Link to="/cart" className="group p-2 rounded-md transition-colors hover:bg-accent/30 relative" aria-label="Cart">
+              <ShoppingCart className="h-5 w-5 transition-transform group-hover:scale-110" />
               {cartCount > 0 && (
-                <span key={cartCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-scale-in">
+                <span key={cartCount} className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center animate-pop">
                   {cartCount}
                 </span>
               )}
@@ -142,9 +142,9 @@ export default function StorefrontLayout() {
         </div>
       </header>
 
-      {/* Main content — fades between pages for a smooth, animated flow */}
+      {/* Main content — gently rises between pages for a smooth, animated flow */}
       <main className="flex-1">
-        <div key={location.pathname} className="animate-fade-in">
+        <div key={location.pathname} className="animate-fade-up-sm">
           <Outlet />
         </div>
       </main>

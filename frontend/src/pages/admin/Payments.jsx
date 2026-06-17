@@ -11,6 +11,8 @@ import { DataTable } from '@/components/admin/DataTable';
 import { FilterBar, FilterField } from '@/components/admin/FilterBar';
 import { Select } from '@/components/ui/Input';
 import { Card, CardContent } from '@/components/ui/Card';
+import { Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
@@ -87,30 +89,30 @@ export default function Payments() {
     <div>
       <PageHeader title="Payments" description="Approve customer payments, manage refunds, track all transactions" />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 animate-fade-up">
-        <Card className={`hover-lift ${pendingCount > 0 ? 'border-amber-300 bg-amber-50/40' : ''}`}>
+      <Stagger step={70} maxDelay={400} animation="fade-up-sm" className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <Card className={`hover-lift-sm ${pendingCount > 0 ? 'border-amber-300 bg-amber-50/40' : ''}`}>
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
                 <div className="text-xs text-muted-foreground">Pending verification</div>
-                <div className={`text-2xl font-semibold ${pendingCount > 0 ? 'text-amber-600' : ''}`}>{pendingCount}</div>
+                <div className={`text-2xl font-semibold ${pendingCount > 0 ? 'text-amber-600' : ''}`}><CountUp value={pendingCount} /></div>
                 {pendingCount > 0 && (
                   <button
                     onClick={() => setFilters({ ...filters, status: 'pending' })}
-                    className="text-xs text-amber-700 hover:underline transition-colors mt-1"
+                    className="text-xs text-amber-700 link-underline transition-colors mt-1 cursor-pointer"
                   >
                     Review now →
                   </button>
                 )}
               </div>
-              <Clock className={`h-8 w-8 ${pendingCount > 0 ? 'text-amber-500' : 'text-muted-foreground'}`} />
+              <Clock className={`h-8 w-8 ${pendingCount > 0 ? 'text-amber-500 animate-pulse' : 'text-muted-foreground'}`} />
             </div>
           </CardContent>
         </Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Completed payments</div><div className="text-2xl font-semibold">{summary.totalPayments}</div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total collected</div><div className="text-2xl font-semibold text-primary">{formatPrice(summary.totalAmount)}</div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground mb-2">By method</div><div className="space-y-1 text-xs">{byMethod.slice(0, 4).map((m) => <div key={m._id} className="flex justify-between"><span className="capitalize">{m._id?.replace(/_/g, ' ')}</span><span>{formatPrice(m.value)}</span></div>)}{!byMethod.length && <div className="text-muted-foreground">No data yet</div>}</div></CardContent></Card>
-      </div>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Completed payments</div><div className="text-2xl font-semibold"><CountUp value={summary.totalPayments} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total collected</div><div className="text-2xl font-semibold text-primary"><CountUp value={summary.totalAmount} format={formatPrice} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground mb-2">By method</div><div className="space-y-1 text-xs">{byMethod.slice(0, 4).map((m) => <div key={m._id} className="flex justify-between"><span className="capitalize">{m._id?.replace(/_/g, ' ')}</span><span>{formatPrice(m.value)}</span></div>)}{!byMethod.length && <div className="text-muted-foreground">No data yet</div>}</div></CardContent></Card>
+      </Stagger>
 
       <FilterBar>
         <FilterField label="Method">

@@ -18,6 +18,8 @@ import { Button } from '@/components/ui/Button';
 import { Input, Select, Textarea } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { PageSpinner } from '@/components/ui/Spinner';
+import { Reveal, Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { StatusTimeline } from '@/components/storefront/StatusTimeline';
 import { formatPrice, formatDate, formatDateTime } from '@/lib/format';
 import { apiErrorMessage } from '@/lib/apiError';
@@ -97,21 +99,24 @@ export default function OrderDetail() {
 
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
         <div className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <Reveal animation="fade-up-sm" className="flex flex-wrap gap-2">
             <Badge status={o.status}>{o.status.replace(/_/g, ' ')}</Badge>
             <Badge status={o.paymentStatus}>{o.paymentStatus.replace(/_/g, ' ')}</Badge>
-          </div>
+          </Reveal>
 
-          <StatusTimeline order={o} />
+          <Reveal animation="fade-up" delay={60}>
+            <StatusTimeline order={o} />
+          </Reveal>
 
+          <Reveal animation="fade-up" delay={120}>
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold mb-3">Items ({o.items.length})</h2>
-              <ul className="space-y-2">
+              <Stagger as="ul" childAs="li" step={60} maxDelay={400} className="space-y-2">
                 {o.items.map((it) => (
-                  <li key={it._id} className="flex gap-3 border rounded p-3">
+                  <div key={it._id} className="flex gap-3 border rounded p-3 hover-lift-sm">
                     <div className="w-12 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
-                      {it.productImage && <img src={it.productImage} alt="" className="w-full h-full object-cover" />}
+                      {it.productImage && <img src={it.productImage} alt="" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-sm line-clamp-1">{it.productName}</div>
@@ -119,32 +124,36 @@ export default function OrderDetail() {
                       <div className="text-xs text-muted-foreground mt-1">{it.quantity} × {formatPrice(it.unitPrice)}</div>
                     </div>
                     <div className="font-semibold">{formatPrice(it.totalPrice)}</div>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </Stagger>
             </CardContent>
           </Card>
+          </Reveal>
 
           {payments.length > 0 && (
+            <Reveal animation="fade-up" delay={180}>
             <Card>
               <CardContent className="pt-6">
                 <h2 className="font-semibold mb-3">Payments ({payments.length})</h2>
-                <ul className="space-y-2 text-sm">
+                <Stagger as="ul" childAs="li" step={60} maxDelay={400} className="space-y-2 text-sm">
                   {payments.map((p) => (
-                    <li key={p._id} className="border rounded p-3 flex items-center justify-between">
+                    <div key={p._id} className="border rounded p-3 flex items-center justify-between hover-lift-sm">
                       <div>
                         <div className="font-medium">{formatPrice(p.amount)} via {p.method?.replace(/_/g, ' ')}</div>
                         <div className="text-xs text-muted-foreground">{formatDateTime(p.paidAt)}</div>
                       </div>
                       <Badge status={p.status}>{p.status}</Badge>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </Stagger>
               </CardContent>
             </Card>
+            </Reveal>
           )}
 
           {o.courier?.trackingNumber && (
+            <Reveal animation="fade-up" delay={240}>
             <Card>
               <CardContent className="pt-6">
                 <h2 className="font-semibold mb-3">Courier</h2>
@@ -152,10 +161,12 @@ export default function OrderDetail() {
                 {o.estimatedDelivery && <p className="text-sm text-muted-foreground mt-1">ETA: {formatDate(o.estimatedDelivery)}</p>}
               </CardContent>
             </Card>
+            </Reveal>
           )}
         </div>
 
         <aside className="space-y-4">
+          <Reveal animation="fade-up-sm" delay={60}>
           <Card className="hover-lift">
             <CardContent className="pt-6 space-y-2 text-sm">
               <h3 className="font-semibold">Customer</h3>
@@ -164,8 +175,10 @@ export default function OrderDetail() {
               <div className="text-muted-foreground">{o.customer?.phone}</div>
             </CardContent>
           </Card>
+          </Reveal>
 
           {o.shippingAddress && (
+            <Reveal animation="fade-up-sm" delay={120}>
             <Card className="hover-lift">
               <CardContent className="pt-6 space-y-1 text-sm">
                 <h3 className="font-semibold mb-2">Shipping address</h3>
@@ -174,8 +187,10 @@ export default function OrderDetail() {
                 <div className="text-muted-foreground">{o.shippingAddress.line1}{o.shippingAddress.line2 ? `, ${o.shippingAddress.line2}` : ''}, {o.shippingAddress.city}{o.shippingAddress.province ? `, ${o.shippingAddress.province}` : ''}</div>
               </CardContent>
             </Card>
+            </Reveal>
           )}
 
+          <Reveal animation="fade-up-sm" delay={180}>
           <Card className="hover-lift">
             <CardContent className="pt-6 space-y-2 text-sm">
               <h3 className="font-semibold">Totals</h3>
@@ -183,10 +198,11 @@ export default function OrderDetail() {
               <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{formatPrice(o.taxAmount)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{formatPrice(o.shippingFee)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span>-{formatPrice(o.discount)}</span></div>
-              <div className="flex justify-between font-semibold text-base pt-2 border-t"><span>Total</span><span className="text-primary">{formatPrice(o.grandTotal)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Paid</span><span>{formatPrice(o.paidAmount)}</span></div>
+              <div className="flex justify-between font-semibold text-base pt-2 border-t"><span>Total</span><span className="text-primary"><CountUp value={o.grandTotal} format={formatPrice} /></span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Paid</span><span><CountUp value={o.paidAmount} format={formatPrice} /></span></div>
             </CardContent>
           </Card>
+          </Reveal>
         </aside>
       </div>
 

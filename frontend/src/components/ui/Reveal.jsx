@@ -5,10 +5,12 @@ import { cn } from '@/lib/utils';
 // compiler always includes them (dynamic `animate-${x}` would be purged).
 const ANIM = {
   'fade-up': 'animate-fade-up',
+  'fade-up-sm': 'animate-fade-up-sm',
   'fade-in': 'animate-fade-in',
   'fade-down': 'animate-fade-down',
   'scale-in': 'animate-scale-in',
   'slide-in-right': 'animate-slide-in-right',
+  'slide-in-left': 'animate-slide-in-left',
 };
 
 /**
@@ -56,6 +58,30 @@ export function Reveal({ children, className, animation = 'fade-up', delay = 0, 
       {...props}
     >
       {children}
+    </Tag>
+  );
+}
+
+/**
+ * Stagger — wraps each child in a <Reveal> with an incremental delay so lists
+ * and grids cascade into view. Caps the cumulative delay so long lists don't
+ * leave the last items hidden for too long.
+ *
+ * Props:
+ *   step:     ms between each child (default 60)
+ *   maxDelay: cap for the cumulative delay (default 400ms)
+ *   animation/once: forwarded to each Reveal
+ *   as:       wrapper element (default 'div'); childAs → each item's tag
+ */
+export function Stagger({ children, className, step = 60, maxDelay = 400, animation = 'fade-up-sm', once = true, as: Tag = 'div', childAs = 'div', ...props }) {
+  const items = Array.isArray(children) ? children : [children];
+  return (
+    <Tag className={className} {...props}>
+      {items.map((child, i) => (
+        <Reveal key={child?.key ?? i} as={childAs} animation={animation} once={once} delay={Math.min(i * step, maxDelay)}>
+          {child}
+        </Reveal>
+      ))}
     </Tag>
   );
 }

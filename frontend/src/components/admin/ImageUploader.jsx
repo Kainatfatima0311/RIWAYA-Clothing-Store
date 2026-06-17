@@ -93,12 +93,12 @@ export function ImageUploader({ value = [], onChange, category = 'general', max 
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {images.map((img, i) => (
-            <div key={i} className="relative group aspect-square rounded-md overflow-hidden border bg-muted">
-              <img src={absoluteUrl(img.url)} alt="" className="w-full h-full object-cover" />
+            <div key={i} className="relative group aspect-square rounded-md overflow-hidden border bg-muted hover-lift-sm">
+              <img src={absoluteUrl(img.url)} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <button
                 type="button"
                 onClick={() => handleRemove(i)}
-                className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all active:scale-90 hover:scale-110"
                 aria-label="Remove image"
               >
                 <X className="h-3 w-3" />
@@ -121,8 +121,8 @@ export function ImageUploader({ value = [], onChange, category = 'general', max 
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           className={cn(
-            'border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition-colors',
-            dragOver ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50',
+            'border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition-all duration-200',
+            dragOver ? 'border-primary bg-primary/5 scale-[1.01] shadow-md' : 'border-border hover:border-primary/50 hover:bg-muted/40',
             uploading && 'pointer-events-none opacity-60'
           )}
         >

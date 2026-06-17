@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Reveal } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
@@ -70,9 +71,9 @@ export default function Cart() {
 
   return (
     <div className="container py-8">
-      <div className="flex items-end justify-between mb-6">
+      <div className="flex items-end justify-between mb-6 animate-fade-up">
         <h1 className="font-serif text-3xl md:text-4xl">Your cart</h1>
-        <button onClick={handleClear} disabled={clearing} className="text-sm text-muted-foreground hover:text-destructive">
+        <button onClick={handleClear} disabled={clearing} className="text-sm text-muted-foreground hover:text-destructive transition-colors">
           Clear cart
         </button>
       </div>
@@ -107,17 +108,17 @@ export default function Cart() {
                     <div className="text-sm font-semibold mt-2">{formatPrice(unitPrice)}</div>
                     <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
                       <div className="flex items-center border rounded-md">
-                        <button onClick={() => handleQtyChange(item._id, item.quantity - 1)} className="p-1.5 hover:bg-accent/30">
+                        <button onClick={() => handleQtyChange(item._id, item.quantity - 1)} className="p-1.5 hover:bg-accent/30 transition-colors active:scale-[0.9]" aria-label="Decrease quantity">
                           <Minus className="h-3.5 w-3.5" />
                         </button>
-                        <span className="px-3 text-sm">{item.quantity}</span>
-                        <button onClick={() => handleQtyChange(item._id, item.quantity + 1)} className="p-1.5 hover:bg-accent/30">
+                        <span key={item.quantity} className="px-3 text-sm inline-block animate-pop">{item.quantity}</span>
+                        <button onClick={() => handleQtyChange(item._id, item.quantity + 1)} className="p-1.5 hover:bg-accent/30 transition-colors active:scale-[0.9]" aria-label="Increase quantity">
                           <Plus className="h-3.5 w-3.5" />
                         </button>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="font-semibold">{formatPrice(unitPrice * item.quantity)}</span>
-                        <button onClick={() => handleRemove(item._id)} className="text-muted-foreground hover:text-destructive p-1">
+                        <button onClick={() => handleRemove(item._id)} className="text-muted-foreground hover:text-destructive p-1 transition-colors active:scale-[0.9]" aria-label="Remove item">
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
@@ -147,7 +148,7 @@ export default function Cart() {
                 )}
                 <div className="border-t pt-2 flex justify-between font-semibold text-base">
                   <span>Estimated total</span>
-                  <span className="text-primary">{formatPrice(grandEstimate)}</span>
+                  <span className="text-primary"><CountUp value={grandEstimate} format={formatPrice} /></span>
                 </div>
               </div>
               <Button className="w-full" onClick={() => navigate('/checkout')}>
