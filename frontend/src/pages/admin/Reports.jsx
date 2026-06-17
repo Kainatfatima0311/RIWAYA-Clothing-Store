@@ -9,11 +9,13 @@ import {
   useStockValueReportQuery,
 } from '@/api/peopleApi';
 import { PageHeader } from '@/components/admin/PageHeader';
-import { Reveal } from '@/components/ui/Reveal';
+import { Reveal, Stagger } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Input';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { formatPrice, formatDate, timeAgo } from '@/lib/format';
 import {
   createReportDoc,
@@ -36,6 +38,7 @@ const formatBucket = (id) => {
 
 export default function Reports() {
   const [groupBy, setGroupBy] = useState('day');
+  const reduced = useReducedMotion();
 
   const { data: sales } = useSalesReportQuery({ groupBy });
   const { data: topProducts } = useTopProductsQuery({ limit: 10 });

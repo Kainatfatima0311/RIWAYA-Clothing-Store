@@ -46,7 +46,15 @@ export default function Profile() {
 
   return (
     <div className="container py-10 max-w-2xl space-y-6">
-      <h1 className="font-serif text-3xl animate-fade-up">My Profile</h1>
+      <div className="flex items-center gap-4 animate-fade-up">
+        <div
+          aria-hidden="true"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-serif text-lg uppercase animate-pop"
+        >
+          {(user?.name || user?.email || '?').trim().charAt(0)}
+        </div>
+        <h1 className="font-serif text-3xl">My Profile</h1>
+      </div>
 
       {/* Account information */}
       <Reveal animation="fade-up" delay={80}>

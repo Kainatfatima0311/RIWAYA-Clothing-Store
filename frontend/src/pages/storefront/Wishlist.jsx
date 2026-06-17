@@ -95,10 +95,10 @@ export default function Wishlist() {
                 <Link to={`/products/${p.slug}`} className="font-medium text-sm line-clamp-2 hover:text-primary transition-colors">{p.name}</Link>
                 <div className="mt-1 font-semibold text-sm">{formatPrice(onSale ? p.salePrice : p.basePrice)}</div>
                 <div className="mt-3 flex gap-2">
-                  <Button size="sm" className="flex-1" onClick={() => handleMoveToCart(p)}>
-                    <ShoppingBag className="h-3.5 w-3.5 mr-1" /> Add
+                  <Button size="sm" className="flex-1 group/add" onClick={() => handleMoveToCart(p)}>
+                    <ShoppingBag className="h-3.5 w-3.5 mr-1 transition-transform duration-200 group-hover/add:-translate-y-0.5" /> Add
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleRemove(item._id)}>
+                  <Button size="sm" variant="outline" onClick={() => handleRemove(item._id)} aria-label="Remove from wishlist">
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>

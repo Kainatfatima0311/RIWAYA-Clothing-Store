@@ -233,20 +233,20 @@ function EmployeesPanel() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Summary */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="rounded-lg border bg-muted/30 p-4">
+        <Stagger className="grid grid-cols-1 sm:grid-cols-3 gap-4" animation="fade-up-sm">
+          <div className="rounded-lg border bg-muted/30 p-4 hover-lift-sm">
             <div className="text-xs text-muted-foreground">Active employees</div>
-            <div className="text-2xl font-semibold mt-1">{activeCount}</div>
+            <div className="text-2xl font-semibold mt-1"><CountUp value={activeCount} /></div>
           </div>
-          <div className="rounded-lg border bg-muted/30 p-4">
+          <div className="rounded-lg border bg-muted/30 p-4 hover-lift-sm">
             <div className="text-xs text-muted-foreground">Total on record</div>
-            <div className="text-2xl font-semibold mt-1">{employees.length}</div>
+            <div className="text-2xl font-semibold mt-1"><CountUp value={employees.length} /></div>
           </div>
-          <div className="rounded-lg border bg-muted/30 p-4">
+          <div className="rounded-lg border bg-muted/30 p-4 hover-lift-sm">
             <div className="text-xs text-muted-foreground flex items-center gap-1"><PayrollIcon className="h-3.5 w-3.5" /> Est. monthly payroll</div>
-            <div className="text-2xl font-semibold mt-1">{formatPrice(payroll)}</div>
+            <div className="text-2xl font-semibold mt-1"><CountUp value={payroll} format={formatPrice} /></div>
           </div>
-        </div>
+        </Stagger>
 
         <DataTable
           columns={columns}

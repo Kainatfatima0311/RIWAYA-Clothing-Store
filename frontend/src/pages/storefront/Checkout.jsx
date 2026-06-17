@@ -13,6 +13,7 @@ import { Input, Select } from '@/components/ui/Input';
 import { Label, FormError } from '@/components/ui/Label';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Reveal } from '@/components/ui/Reveal';
+import { CountUp } from '@/components/ui/CountUp';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatPrice } from '@/lib/format';
@@ -341,7 +342,7 @@ export default function Checkout() {
         </div>
 
         {/* Order summary */}
-        <aside>
+        <Reveal as="aside" animation="fade-up" delay={120}>
           <Card className="sticky top-20">
             <CardContent className="pt-6 space-y-3">
               <h2 className="font-semibold text-lg">Order summary</h2>
@@ -366,13 +367,13 @@ export default function Checkout() {
               <div className="border-t pt-3 space-y-1 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shippingFee === 0 ? 'Free' : formatPrice(shippingFee)}</span></div>
-                <div className="flex justify-between font-semibold pt-2 border-t text-base"><span>Total</span><span className="text-primary">{formatPrice(grandTotal)}</span></div>
+                <div className="flex justify-between font-semibold pt-2 border-t text-base"><span>Total</span><span className="text-primary"><CountUp value={grandTotal} format={formatPrice} /></span></div>
               </div>
               <Button type="submit" loading={placing} className="w-full">Place order</Button>
               <p className="text-xs text-muted-foreground text-center">By placing this order, you agree to RIWAYA's terms of service.</p>
             </CardContent>
           </Card>
-        </aside>
+        </Reveal>
       </form>
     </div>
   );

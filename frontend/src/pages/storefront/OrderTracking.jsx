@@ -136,7 +136,7 @@ export default function OrderTracking() {
           )}
 
           <div className="text-center pt-4">
-            <Link to="/orders" className="text-sm text-primary font-medium transition-colors hover:text-primary-hover">View all my orders →</Link>
+            <Link to="/orders" className="text-sm text-primary font-medium transition-colors hover:text-primary-hover link-underline">View all my orders →</Link>
           </div>
         </div>
       )}

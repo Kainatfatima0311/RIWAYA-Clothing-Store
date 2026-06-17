@@ -45,12 +45,12 @@ export default function Contact() {
     <div>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-neutral-900 py-24 md:py-32">
-        <img src={contact1} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center" />
+        <img src={contact1} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center animate-fade-in" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/50 to-black/40" />
         <div className="container text-center max-w-2xl text-white">
-          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-3">We'd love to hear from you</p>
-          <h1 className="font-serif text-4xl md:text-5xl drop-shadow-lg">Get in Touch</h1>
-          <p className="text-white/85 mt-4">
+          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-3 animate-fade-down">We'd love to hear from you</p>
+          <h1 className="font-serif text-4xl md:text-5xl drop-shadow-lg animate-fade-up">Get in Touch</h1>
+          <p className="text-white/85 mt-4 animate-fade-up" style={{ animationDelay: '120ms' }}>
             Questions about an order, a custom piece, or anything {BRAND_NAME}? Reach out and our team will get back to you.
           </p>
         </div>
@@ -114,8 +114,8 @@ export default function Contact() {
       </div>
 
       {/* Visit our boutique banner */}
-      <section className="relative isolate overflow-hidden bg-neutral-900">
-        <img src={contact3} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center" />
+      <section className="group relative isolate overflow-hidden bg-neutral-900">
+        <img src={contact3} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/55 to-black/45" />
         <Reveal animation="fade-up" className="container py-20 text-center max-w-2xl text-white">
           <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-3">Come say hello</p>

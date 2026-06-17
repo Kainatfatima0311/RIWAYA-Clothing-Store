@@ -72,12 +72,13 @@ export default function PODetail() {
 
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
         <div className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <Reveal animation="fade-up-sm" className="flex flex-wrap gap-2">
             <Badge status={po.status}>{po.status.replace(/_/g, ' ')}</Badge>
             <Badge status={po.paymentStatus}>{po.paymentStatus.replace(/_/g, ' ')}</Badge>
-          </div>
+          </Reveal>
 
           {/* Items */}
+          <Reveal animation="fade-up" delay={60}>
           <Card>
             <CardContent className="pt-6">
               <h2 className="font-semibold mb-3">Line items</h2>
@@ -93,8 +94,8 @@ export default function PODetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {po.items.map((it) => (
-                    <tr key={it._id} className="border-b last:border-0">
+                  {po.items.map((it, idx) => (
+                    <Reveal as="tr" key={it._id} animation="fade-up-sm" delay={Math.min(idx * 50, 400)} className="border-b last:border-0">
                       <td className="py-2">
                         <div className="font-medium">{it.name}</div>
                         {it.variant && <div className="text-xs text-muted-foreground">{it.variant}</div>}
@@ -107,22 +108,24 @@ export default function PODetail() {
                       </td>
                       <td className="text-right">{formatPrice(it.unitPrice)}</td>
                       <td className="text-right font-medium">{formatPrice(it.totalPrice)}</td>
-                    </tr>
+                    </Reveal>
                   ))}
                 </tbody>
               </table>
               </div>
             </CardContent>
           </Card>
+          </Reveal>
 
           {/* Receipts */}
           {po.receipts?.length > 0 && (
+            <Reveal animation="fade-up" delay={120}>
             <Card>
               <CardContent className="pt-6">
                 <h2 className="font-semibold mb-3">Receipts ({po.receipts.length})</h2>
-                <ul className="space-y-2 text-sm">
+                <Stagger as="ul" childAs="li" step={60} maxDelay={400} className="space-y-2 text-sm">
                   {po.receipts.map((r) => (
-                    <li key={r._id} className="border rounded p-3">
+                    <div key={r._id} className="border rounded p-3 hover-lift-sm">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium">{formatDateTime(r.receivedAt)}</span>
                         <span className="text-xs text-muted-foreground">by {r.receivedBy?.name || '—'}</span>
@@ -131,47 +134,52 @@ export default function PODetail() {
                         {r.items.map((i) => <li key={i._id}>• {i.name}: {i.quantity} units</li>)}
                       </ul>
                       {r.notes && <p className="text-xs mt-1 text-muted-foreground italic">{r.notes}</p>}
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </Stagger>
               </CardContent>
             </Card>
+            </Reveal>
           )}
 
           {/* Payments */}
           {po.payments?.length > 0 && (
+            <Reveal animation="fade-up" delay={180}>
             <Card>
               <CardContent className="pt-6">
                 <h2 className="font-semibold mb-3">Payments ({po.payments.length})</h2>
-                <ul className="space-y-2 text-sm">
+                <Stagger as="ul" childAs="li" step={60} maxDelay={400} className="space-y-2 text-sm">
                   {po.payments.map((p) => (
-                    <li key={p._id} className="border rounded p-3 flex items-center justify-between">
+                    <div key={p._id} className="border rounded p-3 flex items-center justify-between hover-lift-sm">
                       <div>
                         <div className="font-medium">{formatPrice(p.amount)} via {p.method?.replace(/_/g, ' ')}</div>
                         <div className="text-xs text-muted-foreground">{formatDateTime(p.paidAt)} · {p.reference || '—'}</div>
                       </div>
                       <Wallet className="h-5 w-5 text-emerald-600" />
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </Stagger>
               </CardContent>
             </Card>
+            </Reveal>
           )}
         </div>
 
         {/* Sidebar summary */}
         <aside>
+          <Reveal animation="fade-up-sm" delay={60}>
           <Card className="sticky top-20 hover-lift">
             <CardContent className="pt-6 space-y-3 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(po.subtotal)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Tax ({po.taxRate}%)</span><span>{formatPrice(po.taxAmount)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{formatPrice(po.shippingCost)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span>-{formatPrice(po.discount)}</span></div>
-              <div className="flex justify-between font-semibold text-base pt-2 border-t"><span>Grand total</span><span className="text-primary">{formatPrice(po.grandTotal)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Paid</span><span>{formatPrice(po.paidAmount)}</span></div>
-              <div className="flex justify-between font-medium"><span>Outstanding</span><span className="text-destructive">{formatPrice(po.grandTotal - po.paidAmount)}</span></div>
+              <div className="flex justify-between font-semibold text-base pt-2 border-t"><span>Grand total</span><span className="text-primary"><CountUp value={po.grandTotal} format={formatPrice} /></span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Paid</span><span><CountUp value={po.paidAmount} format={formatPrice} /></span></div>
+              <div className="flex justify-between font-medium"><span>Outstanding</span><span className="text-destructive"><CountUp value={po.grandTotal - po.paidAmount} format={formatPrice} /></span></div>
             </CardContent>
           </Card>
+          </Reveal>
         </aside>
       </div>
 

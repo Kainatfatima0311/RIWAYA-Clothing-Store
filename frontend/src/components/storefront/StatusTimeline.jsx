@@ -71,18 +71,30 @@ export function StatusTimeline({ order }) {
               className="flex gap-4"
             >
               <div className="relative flex flex-col items-center">
-                <div
-                  className={cn(
-                    'h-9 w-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
-                    isCompleted
-                      ? 'bg-primary border-primary text-primary-foreground'
-                      : 'bg-background border-border text-muted-foreground'
+                <div className="relative">
+                  {isCurrent && (
+                    <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" aria-hidden="true" />
                   )}
-                >
-                  <step.icon className="h-4 w-4" />
+                  <div
+                    className={cn(
+                      'relative h-9 w-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
+                      isCompleted
+                        ? 'bg-primary border-primary text-primary-foreground'
+                        : 'bg-background border-border text-muted-foreground',
+                      isCurrent && 'shadow-md'
+                    )}
+                  >
+                    <step.icon className="h-4 w-4" />
+                  </div>
                 </div>
                 {idx < FLOW.length - 1 && (
-                  <div className={cn('w-0.5 flex-1 min-h-[24px] mt-1', isCompleted && idx < currentIdx ? 'bg-primary' : 'bg-border')} />
+                  <div className="relative w-0.5 flex-1 min-h-[24px] mt-1 bg-border overflow-hidden">
+                    <div
+                      className="absolute inset-0 origin-top bg-primary transition-transform duration-700 ease-out"
+                      style={{ transform: `scaleY(${isCompleted && idx < currentIdx ? 1 : 0})` }}
+                      aria-hidden="true"
+                    />
+                  </div>
                 )}
               </div>
               <div className="pb-4">

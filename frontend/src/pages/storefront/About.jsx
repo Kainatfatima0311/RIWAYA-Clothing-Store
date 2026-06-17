@@ -28,15 +28,15 @@ export default function About() {
     <div>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-neutral-900 py-28 md:py-40">
-        <img src={about1} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center" />
+        <img src={about1} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center animate-fade-in" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
         <div className="container text-center max-w-3xl text-white">
-          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4">Our Story</p>
-          <h1 className="font-serif text-4xl md:text-6xl leading-tight text-balance drop-shadow-lg">
+          <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 animate-fade-down">Our Story</p>
+          <h1 className="font-serif text-4xl md:text-6xl leading-tight text-balance drop-shadow-lg animate-fade-up">
             Inspired by tradition,<br />
             <span className="text-accent">made for today.</span>
           </h1>
-          <p className="mt-6 text-white/85">
+          <p className="mt-6 text-white/85 animate-fade-up" style={{ animationDelay: '120ms' }}>
             {BRAND_NAME} was born from a love of Pakistan’s timeless textile heritage. Every thread, every motif
             tells a story — and we’re here to keep that story alive for the next generation.
           </p>
@@ -124,10 +124,10 @@ export default function About() {
       </section>
 
       {/* CTA banner */}
-      <section className="relative isolate overflow-hidden bg-neutral-900">
-        <img src={about2} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center" />
+      <section className="group relative isolate overflow-hidden bg-neutral-900">
+        <img src={about2} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/55 to-black/45" />
-        <div className="container py-20 text-center max-w-2xl text-white">
+        <Reveal animation="fade-up" className="container py-20 text-center max-w-2xl text-white">
           <h2 className="font-serif text-3xl md:text-4xl drop-shadow">Find your next favourite</h2>
           <p className="text-white/85 mt-3">
             Explore our latest bridal, formal and embroidered collections — handpicked for the season.
@@ -135,7 +135,7 @@ export default function About() {
           <Link to="/products" className="inline-block mt-6">
             <Button size="lg">Browse products <ArrowRight className="h-4 w-4 ml-2" /></Button>
           </Link>
-        </div>
+        </Reveal>
       </section>
     </div>
   );
