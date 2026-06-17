@@ -10,25 +10,11 @@ export default defineConfig({
     },
   },
   build: {
-    // Lazy routes already keep these out of the initial load; splitting the
-    // vendors into stable chunks also improves long-term browser caching.
+    // Route-level React.lazy code-splitting already keeps the heavy admin-only
+    // deps (recharts, jspdf, html2canvas) out of the initial bundle. We let Vite
+    // handle vendor chunking automatically — manual React/redux/router splitting
+    // risks a chunk execution-order crash at runtime.
     chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes('node_modules')) return undefined;
-          // Order matters: match the most specific package names first.
-          if (/[\\/]node_modules[\\/](jspdf|jspdf-autotable|html2canvas|canvg|dompurify|raphael|fflate)[\\/]/.test(id)) return 'vendor-pdf';
-          if (/[\\/]node_modules[\\/](recharts|d3-|victory-|internmap|robust-predicates)[\\/]/.test(id)) return 'vendor-charts';
-          if (/[\\/]node_modules[\\/](react-router|react-router-dom|@remix-run)[\\/]/.test(id)) return 'vendor-router';
-          if (/[\\/]node_modules[\\/](lucide-react)[\\/]/.test(id)) return 'vendor-icons';
-          if (/[\\/]node_modules[\\/](@reduxjs|react-redux|redux|redux-thunk|reselect|immer)[\\/]/.test(id)) return 'vendor-redux';
-          if (/[\\/]node_modules[\\/](react-hook-form|@hookform|zod)[\\/]/.test(id)) return 'vendor-forms';
-          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
-          return 'vendor';
-        },
-      },
-    },
   },
   server: {
     port: 5173,
