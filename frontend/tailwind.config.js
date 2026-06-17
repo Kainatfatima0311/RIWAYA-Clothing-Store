@@ -71,6 +71,9 @@ export default {
         'gradient-pan': { '0%, 100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
         // Indeterminate top progress bar for route/data loading
         progress: { '0%': { transform: 'translateX(-100%) scaleX(0.4)' }, '50%': { transform: 'translateX(0) scaleX(0.6)' }, '100%': { transform: 'translateX(100%) scaleX(0.4)' } },
+        // Cinematic slow Ken-Burns zoom for hero imagery (overscaled so it never
+        // reveals an edge under parallax). Use on a child of a parallax wrapper.
+        kenburns: { '0%': { transform: 'scale(1.06)' }, '100%': { transform: 'scale(1.12)' } },
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out both',
@@ -87,6 +90,7 @@ export default {
         sheen: 'sheen 7s ease-in-out infinite',
         'gradient-pan': 'gradient-pan 6s ease infinite',
         progress: 'progress 1.1s ease-in-out infinite',
+        kenburns: 'kenburns 18s ease-in-out infinite alternate',
       },
     },
   },

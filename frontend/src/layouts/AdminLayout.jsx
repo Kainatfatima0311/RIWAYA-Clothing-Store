@@ -21,11 +21,12 @@ import {
   ListOrdered,
   BookOpen,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectUser, clearUser } from '@/store/slices/authSlice';
 import { useLogoutMutation } from '@/api/authApi';
+import { PageSpinner } from '@/components/ui/Spinner';
 import { BRAND_NAME } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
@@ -177,7 +178,9 @@ export default function AdminLayout() {
 
         <main className="flex-1 p-4 lg:p-6 max-w-full">
           <div key={location.pathname} className="animate-fade-up-sm">
-            <Outlet />
+            <Suspense fallback={<PageSpinner />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>

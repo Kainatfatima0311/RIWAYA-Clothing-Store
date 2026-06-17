@@ -15,6 +15,7 @@ import {
   Rocket,
 } from 'lucide-react';
 import { PageHeader } from '@/components/admin/PageHeader';
+import { Reveal } from '@/components/ui/Reveal';
 import { Card, CardContent } from '@/components/ui/Card';
 
 // The recommended order to set things up in. Each later step depends on the ones above it.
@@ -100,9 +101,10 @@ export default function Guide() {
       </div>
 
       {/* Intro */}
-      <Card className="mb-6 border-primary/30 bg-primary/5">
+      <Reveal animation="fade-up" className="mb-6">
+       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="p-5 flex gap-4">
-          <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0">
+          <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0 animate-pop">
             <Rocket className="h-5 w-5" />
           </div>
           <div className="text-sm text-foreground/80">
@@ -114,38 +116,42 @@ export default function Guide() {
             </p>
           </div>
         </CardContent>
-      </Card>
+       </Card>
+      </Reveal>
 
       {/* Steps */}
       <div className="space-y-3">
         {STEPS.map((s, i) => (
-          <Card key={s.to} className="hover-lift">
-            <CardContent className="p-4 flex items-start gap-4">
-              <div className="flex flex-col items-center flex-shrink-0">
-                <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
-                  {i + 1}
+          <Reveal key={s.to} animation="fade-up-sm" delay={Math.min(i * 60, 400)}>
+            <Card className="hover-lift-sm group">
+              <CardContent className="p-4 flex items-start gap-4">
+                <div className="flex flex-col items-center flex-shrink-0">
+                  <div className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold animate-pop">
+                    {i + 1}
+                  </div>
                 </div>
-              </div>
-              <div className="flex-shrink-0 hidden sm:flex h-10 w-10 rounded-md bg-muted items-center justify-center">
-                <s.icon className="h-5 w-5 text-primary" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-semibold">{s.title}</h3>
-                <p className="text-sm text-muted-foreground mt-0.5">{s.body}</p>
-              </div>
-              <Link
-                to={s.to}
-                className="flex-shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover hover:underline transition-colors whitespace-nowrap mt-1"
-              >
-                Open <ArrowRight className="h-4 w-4" />
-              </Link>
-            </CardContent>
-          </Card>
+                <div className="flex-shrink-0 hidden sm:flex h-10 w-10 rounded-md bg-muted items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                  <s.icon className="h-5 w-5 text-primary" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold">{s.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">{s.body}</p>
+                </div>
+                <Link
+                  to={s.to}
+                  className="flex-shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover hover:underline transition-all hover:gap-2 whitespace-nowrap mt-1"
+                >
+                  Open <ArrowRight className="h-4 w-4" />
+                </Link>
+              </CardContent>
+            </Card>
+          </Reveal>
         ))}
       </div>
 
       {/* Tips */}
-      <Card className="mt-6">
+      <Reveal animation="fade-up" className="mt-6">
+       <Card>
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb className="h-5 w-5 text-amber-500" />
@@ -160,7 +166,8 @@ export default function Guide() {
             ))}
           </ul>
         </CardContent>
-      </Card>
+       </Card>
+      </Reveal>
     </div>
   );
 }

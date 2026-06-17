@@ -1,12 +1,13 @@
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, Heart, User, LogOut, Search, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { toast } from 'sonner';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { selectIsAuthenticated, selectUser, clearUser } from '@/store/slices/authSlice';
 import { useLogoutMutation } from '@/api/authApi';
 import { useGetCartQuery } from '@/api/cartApi';
 import { useGetWishlistQuery } from '@/api/wishlistApi';
+import { PageSpinner } from '@/components/ui/Spinner';
 import { BRAND_NAME } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
@@ -57,13 +58,19 @@ export default function StorefrontLayout() {
 
           <nav className="hidden md:flex items-center gap-6">
             {navItems.map((n) => (
-              <Link
+              <NavLink
                 key={n.to}
                 to={n.to}
-                className="relative text-sm font-medium transition-colors hover:text-primary after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
+                end={n.to === '/'}
+                className={({ isActive }) =>
+                  cn(
+                    'relative text-sm font-medium transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:bg-primary after:transition-transform after:duration-300',
+                    isActive ? 'text-primary after:scale-x-100' : 'hover:text-primary after:scale-x-0 hover:after:scale-x-100'
+                  )
+                }
               >
                 {n.label}
-              </Link>
+              </NavLink>
             ))}
           </nav>
 
@@ -115,14 +122,20 @@ export default function StorefrontLayout() {
         <div id="mobile-nav" className={cn('md:hidden border-t', open ? 'block animate-fade-down' : 'hidden')}>
           <div className="container py-3 flex flex-col gap-2">
             {navItems.map((n) => (
-              <Link
+              <NavLink
                 key={n.to}
                 to={n.to}
+                end={n.to === '/'}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm font-medium transition-colors hover:text-primary"
+                className={({ isActive }) =>
+                  cn(
+                    'py-2 pl-3 -ml-3 text-sm font-medium border-l-2 transition-all',
+                    isActive ? 'border-primary text-primary' : 'border-transparent hover:border-primary/40 hover:text-primary hover:pl-4'
+                  )
+                }
               >
                 {n.label}
-              </Link>
+              </NavLink>
             ))}
             {isAuth ? (
               <>
@@ -142,10 +155,13 @@ export default function StorefrontLayout() {
         </div>
       </header>
 
-      {/* Main content — gently rises between pages for a smooth, animated flow */}
+      {/* Main content — gently rises between pages for a smooth, animated flow.
+          Suspense keeps the nav visible while lazy route chunks load. */}
       <main className="flex-1">
         <div key={location.pathname} className="animate-fade-up-sm">
-          <Outlet />
+          <Suspense fallback={<PageSpinner />}>
+            <Outlet />
+          </Suspense>
         </div>
       </main>
 

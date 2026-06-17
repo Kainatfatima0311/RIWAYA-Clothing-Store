@@ -68,7 +68,7 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group block bg-card rounded-lg overflow-hidden border hover-lift hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+      className="group block bg-card rounded-lg overflow-hidden border transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg"
     >
       {/* Image */}
       <div className="relative aspect-[3/4] bg-muted overflow-hidden">

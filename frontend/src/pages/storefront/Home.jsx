@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ShieldCheck, Truck, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -12,41 +13,118 @@ export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
   const { data: categories } = useStorefrontCategoriesQuery();
 
+  // Smooth mouse-move parallax for the hero. Writes --mx/--my CSS variables on
+  // the section (via rAF, no React re-render) which the layers below read in
+  // their transforms for a layered depth effect. Disabled for touch devices and
+  // when the user prefers reduced motion.
+  const heroRef = useRef(null);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el || !window.matchMedia) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    let raf = 0;
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 … 0.5
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty('--mx', x.toFixed(3));
+        el.style.setProperty('--my', y.toFixed(3));
+      });
+    };
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.setProperty('--mx', '0');
+      el.style.setProperty('--my', '0');
+    };
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <div>
-      <section className="relative isolate overflow-hidden bg-neutral-900 min-h-[calc(100vh-4rem)] flex items-center py-20">
-        {/* Hero background photo */}
-        <img
-          src={heroImg}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-top"
-        />
+      <section ref={heroRef} className="relative isolate overflow-hidden bg-neutral-900 min-h-[calc(100vh-4rem)] flex items-center py-20">
+        {/* Hero background photo. Outer layer parallaxes with the cursor; the
+            inner image runs a very slow cinematic Ken-Burns zoom (kept on
+            separate elements so the two transforms never fight). The image is
+            over-scaled so the parallax translate never reveals an edge. */}
+        <div
+          className="absolute inset-0 -z-10 overflow-hidden will-change-transform transition-transform duration-300 ease-out"
+          style={{ transform: 'translate3d(calc(var(--mx, 0) * 22px), calc(var(--my, 0) * 22px), 0)' }}
+        >
+          <img
+            src={heroImg}
+            alt=""
+            aria-hidden="true"
+            fetchpriority="high"
+            className="h-full w-full object-cover object-top animate-kenburns will-change-transform"
+          />
+        </div>
         {/* Readability overlay so the headline stays legible over the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
-        {/* Ambient light sweep — subtle continuous "live" motion across the hero */}
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+
+        {/* Floating gold glow orbs — drift continuously (float) and shift as a
+            group with the cursor (parallax). pointer-events-none so they never
+            block interaction. */}
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute inset-0 transition-transform duration-300 ease-out"
+            style={{ transform: 'translate3d(calc(var(--mx, 0) * 40px), calc(var(--my, 0) * 40px), 0)' }}
+          >
+            <div className="absolute top-1/4 -left-16 h-72 w-72 rounded-full bg-primary/30 blur-3xl animate-float" />
+            <div className="absolute bottom-12 right-0 h-80 w-80 rounded-full bg-accent/25 blur-3xl animate-float [animation-delay:1.5s]" />
+            <div className="absolute top-8 right-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl animate-float [animation-delay:3s]" />
+          </div>
+          {/* Ambient light sweep — subtle continuous "live" motion across the hero */}
           <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheen" />
         </div>
+
         <div className="container text-center text-white">
-          <div className="mx-auto max-w-3xl animate-fade-up">
-            <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 drop-shadow">A timeless tradition</p>
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
-              Crafted in heritage,<br />
-              <span className="text-accent">worn with pride.</span>
-            </h1>
-            <p className="mt-6 text-white/85 max-w-xl mx-auto drop-shadow-md">
-              RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link to="/products"><Button size="lg">Shop the collection</Button></Link>
-              <Link to="/about"><Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-colors">Our story</Button></Link>
+          {/* Text drifts opposite to the orbs for layered depth */}
+          <div
+            className="transition-transform duration-300 ease-out"
+            style={{ transform: 'translate3d(calc(var(--mx, 0) * -10px), calc(var(--my, 0) * -10px), 0)' }}
+          >
+            <div className="mx-auto max-w-3xl animate-fade-up">
+              <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 drop-shadow">A timeless tradition</p>
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
+                Crafted in heritage,<br />
+                <span className="text-accent">worn with pride.</span>
+              </h1>
+              <p className="mt-6 text-white/85 max-w-xl mx-auto drop-shadow-md">
+                RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                {/* Primary CTA — gold glow + light sweep on hover + arrow slide */}
+                <Link to="/products" className="group">
+                  <Button size="lg" className="relative overflow-hidden shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03]">
+                    <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                    <span className="relative">Shop the collection</span>
+                    <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+                {/* Secondary CTA — fills on hover */}
+                <Link to="/about" className="group">
+                  <Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-all hover:scale-[1.03]">
+                    Our story
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Live scroll cue — gentle continuous bounce */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 animate-bounce" aria-hidden="true">
+        {/* Scroll cue — gentle float (calmer than a bounce loop) */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 animate-float" aria-hidden="true">
           <ChevronDown className="h-6 w-6" />
         </div>
       </section>
