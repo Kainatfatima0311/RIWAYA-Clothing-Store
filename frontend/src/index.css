@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    /* Light theme — Warm Ivory + Premium Gold (luxury B2B palette) */
-    --background: 34 56% 90%;          /* Warm Ivory      #F4E8D8 */
-    --foreground: 30 11% 11%;          /* Rich Charcoal   #1E1B18 */
-    --card: 0 0% 100%;                 /* White cards     #FFFFFF */
+    /* Light theme — Warm Ivory + Premium Gold (luxury palette, polished) */
+    --background: 34 47% 92%;          /* Cleaner Warm Ivory  ~#F3ECDE */
+    --foreground: 30 11% 11%;          /* Rich Charcoal       #1E1B18 */
+    --card: 34 47% 96%;                /* Warm off-white card ~#FAF6EF */
     --card-foreground: 30 11% 11%;
-    --primary: 34 55% 50%;             /* Warm Gold       #C68A3A */
+    --primary: 35 60% 45%;             /* Deeper Antique Gold ~#BC8233 (better contrast) */
     --primary-foreground: 0 0% 100%;   /* White text on gold */
-    --primary-hover: 35 62% 55%;       /* Gold Bronze     #D49A47 */
+    --primary-hover: 34 55% 50%;       /* Bright Gold on hover #C68A3A */
     --secondary: 31 38% 75%;           /* Soft Beige      #D8C1A8 */
     --secondary-foreground: 30 11% 11%;
-    --accent: 34 55% 50%;              /* Warm Gold accent #C68A3A */
+    --accent: 35 60% 45%;              /* Gold accent == primary ~#BC8233 */
     --accent-foreground: 0 0% 100%;
     --muted: 34 40% 88%;               /* Light warm beige */
     --muted-foreground: 29 26% 23%;    /* Dark Brown      #4A3A2B */
     --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
-    --border: 29 26% 62%;              /* Soft Taupe      #B79D84 */
-    --input: 29 26% 62%;
-    --ring: 34 55% 50%;                /* Gold focus ring */
+    --border: 30 24% 80%;              /* Softer Taupe   ~#D9CEBF */
+    --input: 30 24% 70%;               /* Softer but visible field edge ~#BFAE99 */
+    --ring: 35 60% 45%;                /* Gold focus ring ~#BC8233 */
     --radius: 0.5rem;
   }
 

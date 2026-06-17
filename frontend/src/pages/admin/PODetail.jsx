@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, XCircle, Truck, Wallet } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle, Truck, Wallet, FileDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import {
@@ -36,10 +36,23 @@ export default function PODetail() {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   if (isLoading) return <PageSpinner label="Loading PO…" />;
   const po = data?.data;
   if (!po) return <p>PO not found</p>;
+
+  const handleDownloadPO = async () => {
+    setDownloading(true);
+    try {
+      const { downloadPurchaseOrderPdf } = await import('@/lib/pdf');
+      downloadPurchaseOrderPdf(po);
+    } catch {
+      toast.error('Could not generate PO');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="animate-fade-up">
@@ -52,6 +65,9 @@ export default function PODetail() {
         description={`Created ${formatDate(po.orderDate)} for ${po.supplier?.name}`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleDownloadPO} loading={downloading} aria-label="Download purchase order">
+              <FileDown className="h-4 w-4 mr-1" /> PDF
+            </Button>
             {po.status === 'draft' && (
               <Button onClick={async () => { try { await approve(id).unwrap(); toast.success('PO approved'); } catch (err) { toast.error(apiErrorMessage(err)); } }} loading={approving}>
                 <CheckCircle2 className="h-4 w-4 mr-1" /> Approve

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Truck, XCircle } from 'lucide-react';
+import { ArrowLeft, Truck, XCircle, FileDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import {
@@ -50,6 +50,7 @@ export default function OrderDetail() {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   if (isLoading) return <PageSpinner label="Loading order…" />;
   const o = data?.data;
@@ -57,6 +58,18 @@ export default function OrderDetail() {
 
   const payments = paymentsData?.data || [];
   const nextStatuses = NEXT_STATUS[o.status] || [];
+
+  const handleInvoice = async () => {
+    setDownloading(true);
+    try {
+      const { downloadOrderInvoice } = await import('@/lib/pdf');
+      downloadOrderInvoice(o);
+    } catch {
+      toast.error('Could not generate invoice');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div>
@@ -70,6 +83,9 @@ export default function OrderDetail() {
         description={`${o.orderType === 'online' ? 'Online' : 'Walk-in'} order · placed ${formatDateTime(o.orderedAt)}`}
         actions={
           <div className="flex items-center gap-2 flex-wrap">
+            <Button variant="outline" size="sm" onClick={handleInvoice} loading={downloading} aria-label="Download invoice">
+              <FileDown className="h-4 w-4 mr-1" /> Invoice
+            </Button>
             {nextStatuses.map((s) => (
               s !== 'cancelled' && (
                 <Button

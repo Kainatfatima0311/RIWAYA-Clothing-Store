@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ChevronRight } from 'lucide-react';
+import { ShoppingBag, ChevronRight, FileDown } from 'lucide-react';
+import { toast } from 'sonner';
 import { useMyOrdersQuery } from '@/api/orderApi';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -10,6 +11,17 @@ import { formatPrice, formatDate } from '@/lib/format';
 
 export default function MyOrders() {
   const { data, isLoading } = useMyOrdersQuery({ page: 1, limit: 50 });
+
+  // Generate the invoice on click; jspdf loads lazily so it never weighs down
+  // the storefront bundle until a customer actually downloads.
+  const handleInvoice = async (order) => {
+    try {
+      const { downloadOrderInvoice } = await import('@/lib/pdf');
+      downloadOrderInvoice(order);
+    } catch {
+      toast.error('Could not generate invoice');
+    }
+  };
 
   if (isLoading) return <PageSpinner label="Loading your orders…" />;
 
@@ -59,6 +71,14 @@ export default function MyOrders() {
                   <div className="font-semibold">{formatPrice(order.grandTotal)}</div>
                   <div className="text-xs text-muted-foreground capitalize">{order.orderType}</div>
                 </div>
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleInvoice(order); }}
+                  className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-2.5 rounded-md hover:bg-accent/30 transition-colors press"
+                  aria-label={`Download invoice for ${order.orderNumber}`}
+                >
+                  <FileDown className="h-4 w-4" /> <span className="hidden sm:inline">Invoice</span>
+                </button>
                 <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
               </CardContent>
             </Card>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Search, Package, MapPin, Truck, Clock } from 'lucide-react';
+import { Search, Package, MapPin, Truck, Clock, FileDown } from 'lucide-react';
+import { toast } from 'sonner';
 import { useTrackOrderQuery } from '@/api/orderApi';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -18,6 +19,20 @@ export default function OrderTracking() {
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useTrackOrderQuery(paramNumber, { skip: !paramNumber });
+  const [downloading, setDownloading] = useState(false);
+
+  const handleInvoice = async () => {
+    if (!data?.data) return;
+    setDownloading(true);
+    try {
+      const { downloadOrderInvoice } = await import('@/lib/pdf');
+      downloadOrderInvoice(data.data);
+    } catch {
+      toast.error('Could not generate invoice');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="container py-8 max-w-3xl">
@@ -71,6 +86,9 @@ export default function OrderTracking() {
                   ) : (
                     <Badge status={data.data.paymentStatus}>{data.data.paymentStatus}</Badge>
                   )}
+                  <Button variant="outline" size="sm" onClick={handleInvoice} loading={downloading} aria-label="Download invoice">
+                    <FileDown className="h-4 w-4 mr-1" /> Invoice
+                  </Button>
                 </div>
               </CardContent>
             </Card>

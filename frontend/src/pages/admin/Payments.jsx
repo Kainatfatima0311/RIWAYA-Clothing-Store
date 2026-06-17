@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, FileDown } from 'lucide-react';
 import {
   useListPaymentsQuery,
   usePaymentStatsQuery,
@@ -53,6 +53,15 @@ export default function Payments() {
     }
   };
 
+  const handleReceipt = async (p) => {
+    try {
+      const { downloadPaymentReceipt } = await import('@/lib/pdf');
+      downloadPaymentReceipt(p);
+    } catch {
+      toast.error('Could not generate receipt');
+    }
+  };
+
   const columns = [
     { key: 'paymentNumber', label: 'Receipt #', render: (r) => <span className="font-mono text-xs">{r.paymentNumber}</span> },
     { key: 'order', label: 'Order', render: (r) => r.order?.orderNumber || '—' },
@@ -78,7 +87,14 @@ export default function Payments() {
           );
         }
         if (r.status === 'completed') {
-          return <Button size="sm" variant="outline" onClick={() => setRefundId(r._id)}>Refund</Button>;
+          return (
+            <div className="flex items-center justify-end gap-1">
+              <Button size="sm" variant="outline" onClick={() => handleReceipt(r)} aria-label="Download receipt">
+                <FileDown className="h-3.5 w-3.5 mr-1" /> Receipt
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => setRefundId(r._id)}>Refund</Button>
+            </div>
+          );
         }
         return null;
       },
