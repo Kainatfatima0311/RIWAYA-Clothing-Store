@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ShieldCheck, Truck, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { useStorefrontFeaturedQuery, useStorefrontCategoriesQuery } from '@/api/productApi';
 import { ProductCard, ProductCardSkeleton } from '@/components/storefront/ProductCard';
+import { spotlightMove } from '@/lib/spotlight';
 // Imported (not a /public path) so Vite bundles it with a content-hashed filename —
 // guaranteed to resolve on Vercel regardless of base path.
 import heroImg from '@/assets/hero5.jpeg';
@@ -13,53 +13,12 @@ export default function Home() {
   const { data: featured, isLoading: loadingFeatured } = useStorefrontFeaturedQuery(8);
   const { data: categories } = useStorefrontCategoriesQuery();
 
-  // Smooth mouse-move parallax for the hero. Writes --mx/--my CSS variables on
-  // the section (via rAF, no React re-render) which the layers below read in
-  // their transforms for a layered depth effect. Disabled for touch devices and
-  // when the user prefers reduced motion.
-  const heroRef = useRef(null);
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el || !window.matchMedia) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-
-    let raf = 0;
-    const onMove = (e) => {
-      const rect = el.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 … 0.5
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        el.style.setProperty('--mx', x.toFixed(3));
-        el.style.setProperty('--my', y.toFixed(3));
-      });
-    };
-    const onLeave = () => {
-      cancelAnimationFrame(raf);
-      el.style.setProperty('--mx', '0');
-      el.style.setProperty('--my', '0');
-    };
-    el.addEventListener('mousemove', onMove);
-    el.addEventListener('mouseleave', onLeave);
-    return () => {
-      el.removeEventListener('mousemove', onMove);
-      el.removeEventListener('mouseleave', onLeave);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
   return (
     <div>
-      <section ref={heroRef} className="relative isolate overflow-hidden bg-neutral-900 min-h-[calc(100vh-4rem)] flex items-center py-20">
-        {/* Hero background photo. Outer layer parallaxes with the cursor; the
-            inner image runs a very slow cinematic Ken-Burns zoom (kept on
-            separate elements so the two transforms never fight). The image is
-            over-scaled so the parallax translate never reveals an edge. */}
-        <div
-          className="absolute inset-0 -z-10 overflow-hidden will-change-transform transition-transform duration-300 ease-out"
-          style={{ transform: 'translate3d(calc(var(--mx, 0) * 22px), calc(var(--my, 0) * 22px), 0)' }}
-        >
+      <section className="relative isolate overflow-hidden bg-neutral-900 min-h-[calc(100vh-4rem)] flex items-center py-20">
+        {/* Hero background photo with a very slow, cinematic Ken-Burns zoom
+            (ambient only — no mouse-move parallax). */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
           <img
             src={heroImg}
             alt=""
@@ -71,54 +30,42 @@ export default function Home() {
         {/* Readability overlay so the headline stays legible over the photo */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/45 to-black/40" />
 
-        {/* Floating gold glow orbs — drift continuously (float) and shift as a
-            group with the cursor (parallax). pointer-events-none so they never
-            block interaction. */}
+        {/* Floating gold glow orbs — gentle ambient drift (not mouse-driven).
+            pointer-events-none so they never block interaction. */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
-          <div
-            className="absolute inset-0 transition-transform duration-300 ease-out"
-            style={{ transform: 'translate3d(calc(var(--mx, 0) * 40px), calc(var(--my, 0) * 40px), 0)' }}
-          >
-            <div className="absolute top-1/4 -left-16 h-72 w-72 rounded-full bg-primary/30 blur-3xl animate-float" />
-            <div className="absolute bottom-12 right-0 h-80 w-80 rounded-full bg-accent/25 blur-3xl animate-float [animation-delay:1.5s]" />
-            <div className="absolute top-8 right-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl animate-float [animation-delay:3s]" />
-          </div>
-          {/* Ambient light sweep — subtle continuous "live" motion across the hero */}
+          <div className="absolute top-1/4 -left-16 h-72 w-72 rounded-full bg-primary/30 blur-3xl animate-float" />
+          <div className="absolute bottom-12 right-0 h-80 w-80 rounded-full bg-accent/25 blur-3xl animate-float [animation-delay:1.5s]" />
+          <div className="absolute top-8 right-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl animate-float [animation-delay:3s]" />
+          {/* Ambient light sweep */}
           <div className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheen" />
         </div>
 
         <div className="container text-center text-white">
-          {/* Text drifts opposite to the orbs for layered depth */}
-          <div
-            className="transition-transform duration-300 ease-out"
-            style={{ transform: 'translate3d(calc(var(--mx, 0) * -10px), calc(var(--my, 0) * -10px), 0)' }}
-          >
-            <div className="mx-auto max-w-3xl animate-fade-up">
-              <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 drop-shadow">A timeless tradition</p>
-              <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
-                Crafted in heritage,<br />
-                <span className="text-accent">worn with pride.</span>
-              </h1>
-              <p className="mt-6 text-white/85 max-w-xl mx-auto drop-shadow-md">
-                RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                {/* Primary CTA — gold glow + light sweep on hover + arrow slide */}
-                <Link to="/products" className="group">
-                  <Button size="lg" className="relative overflow-hidden shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03]">
-                    <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                    <span className="relative">Shop the collection</span>
-                    <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-                {/* Secondary CTA — fills on hover */}
-                <Link to="/about" className="group">
-                  <Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-all hover:scale-[1.03]">
-                    Our story
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-              </div>
+          <div className="mx-auto max-w-3xl animate-fade-up">
+            <p className="text-sm uppercase tracking-[0.3em] text-white/80 mb-4 drop-shadow">A timeless tradition</p>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-balance leading-tight drop-shadow-lg">
+              Crafted in heritage,<br />
+              <span className="text-accent">worn with pride.</span>
+            </h1>
+            <p className="mt-6 text-white/85 max-w-xl mx-auto drop-shadow-md">
+              RIWAYA brings you the finest embroidered, bridal, and formal wear — designed with grace, made for unforgettable moments.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              {/* Primary CTA — gold glow + light sweep on hover + arrow slide */}
+              <Link to="/products" className="group">
+                <Button size="lg" className="relative overflow-hidden shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03]">
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                  <span className="relative">Shop the collection</span>
+                  <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              {/* Secondary CTA — fills on hover */}
+              <Link to="/about" className="group">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/40 hover:bg-white hover:text-foreground transition-all hover:scale-[1.03]">
+                  Our story
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -136,14 +83,21 @@ export default function Home() {
           { icon: Truck, title: 'Fast nationwide delivery', desc: 'Cash on delivery and online payment available.' },
         ].map((v, i) => (
           <Reveal key={v.title} delay={i * 90} animation="fade-up-sm">
-            <div className="group relative h-full overflow-hidden rounded-2xl border bg-card p-8 text-center shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-              {/* subtle gold wash that warms on hover */}
+            <div
+              onMouseMove={spotlightMove}
+              className="group relative h-full overflow-hidden rounded-2xl border bg-card p-8 text-center shadow-sm glow-gold transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/40"
+            >
+              {/* cursor-following warm gold light wash on hover */}
+              <span aria-hidden="true" className="spotlight pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              {/* top accent line */}
               <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/15">
-                <v.icon className="h-7 w-7 text-primary" />
+              <div className="relative z-10">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/15">
+                  <v.icon className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-serif text-xl mb-2">{v.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
               </div>
-              <h3 className="font-serif text-xl mb-2">{v.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
             </div>
           </Reveal>
         ))}
@@ -161,7 +115,8 @@ export default function Home() {
                 <Reveal key={cat._id} delay={Math.min(i * 60, 400)}>
                 <Link
                   to={`/products?category=${cat._id}`}
-                  className="group relative aspect-[4/5] rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-end justify-center text-center p-4 hover-lift"
+                  onMouseMove={spotlightMove}
+                  className="group relative aspect-[4/5] rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/30 flex items-end justify-center text-center p-4 hover-lift glow-gold"
                 >
                   {hasImage && (
                     <>
@@ -176,7 +131,9 @@ export default function Home() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                     </>
                   )}
-                  <div className="relative">
+                  {/* cursor-following warm gold light wash on hover */}
+                  <span aria-hidden="true" className="spotlight pointer-events-none absolute inset-0 z-[1] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="relative z-10">
                     <div className={`font-serif text-xl ${hasImage ? 'text-white drop-shadow' : 'text-primary'}`}>{cat.name}</div>
                     <div className={`text-xs mt-1 ${hasImage ? 'text-white/80' : 'text-muted-foreground'}`}>{cat.productCount || 0} items</div>
                   </div>

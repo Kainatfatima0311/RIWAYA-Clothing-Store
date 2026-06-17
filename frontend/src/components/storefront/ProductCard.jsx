@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/Badge';
 import { ProductImage } from '@/components/storefront/ProductImage';
 import { cn } from '@/lib/utils';
 import { apiErrorMessage } from '@/lib/apiError';
+import { spotlightMove } from '@/lib/spotlight';
 
 export function ProductCard({ product }) {
   const isAuth = useAppSelector(selectIsAuthenticated);
@@ -68,8 +69,11 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group block bg-card rounded-lg overflow-hidden border transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg"
+      onMouseMove={spotlightMove}
+      className="group relative block bg-card rounded-lg overflow-hidden border glow-gold transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02]"
     >
+      {/* Cursor-following warm gold light wash on hover */}
+      <span aria-hidden="true" className="spotlight pointer-events-none absolute inset-0 z-10 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       {/* Image */}
       <div className="relative aspect-[3/4] bg-muted overflow-hidden">
         <ProductImage
