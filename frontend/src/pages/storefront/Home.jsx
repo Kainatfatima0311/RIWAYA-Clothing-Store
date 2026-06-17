@@ -129,16 +129,22 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container py-16 grid md:grid-cols-3 gap-8">
+      <section className="container py-16 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         {[
           { icon: Sparkles, title: 'Hand-crafted embroidery', desc: 'Each piece is a labour of love by skilled artisans.' },
           { icon: ShieldCheck, title: 'Premium fabrics', desc: 'Lawn, silk, chiffon — sourced for comfort and elegance.' },
           { icon: Truck, title: 'Fast nationwide delivery', desc: 'Cash on delivery and online payment available.' },
         ].map((v, i) => (
-          <Reveal key={v.title} delay={i * 60} className="text-center p-6 rounded-lg hover-lift">
-            <v.icon className="h-10 w-10 mx-auto text-primary mb-3" />
-            <h3 className="font-semibold mb-1">{v.title}</h3>
-            <p className="text-sm text-muted-foreground">{v.desc}</p>
+          <Reveal key={v.title} delay={i * 90} animation="fade-up-sm">
+            <div className="group relative h-full overflow-hidden rounded-2xl border bg-card p-8 text-center shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+              {/* subtle gold wash that warms on hover */}
+              <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/15">
+                <v.icon className="h-7 w-7 text-primary" />
+              </div>
+              <h3 className="font-serif text-xl mb-2">{v.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
+            </div>
           </Reveal>
         ))}
       </section>
