@@ -251,9 +251,9 @@ export default function Reports() {
       />
 
       <Reveal animation="fade-up" className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total SKUs</div><div className="text-2xl font-semibold">{sv.totalSKUs}</div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Units in stock</div><div className="text-2xl font-semibold">{sv.totalUnits}</div></CardContent></Card>
-        <Card className="hover-lift"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Stock value</div><div className="text-2xl font-semibold text-primary">{formatPrice(sv.totalValue)}</div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Total SKUs</div><div className="text-2xl font-semibold"><CountUp value={sv.totalSKUs} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Units in stock</div><div className="text-2xl font-semibold"><CountUp value={sv.totalUnits} /></div></CardContent></Card>
+        <Card className="hover-lift-sm"><CardContent className="pt-6"><div className="text-xs text-muted-foreground">Stock value</div><div className="text-2xl font-semibold text-primary"><CountUp value={sv.totalValue} format={formatPrice} /></div></CardContent></Card>
       </Reveal>
 
       <Card className="mb-6">
